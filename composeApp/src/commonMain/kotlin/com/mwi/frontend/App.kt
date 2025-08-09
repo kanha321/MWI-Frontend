@@ -1,27 +1,18 @@
 package com.mwi.frontend
 
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Settings
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SnackbarHostState
-import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
-import com.kanhaji.basics.AppContent
-import com.kanhaji.basics.composables.MySnackBarObject
-import com.kanhaji.basics.composables.MySnackbarHost
-import com.kanhaji.basics.legacy.TestContent
-import com.kanhaji.basics.theme.AppTheme
+import androidx.compose.ui.Modifier
+import cafe.adriel.voyager.navigator.Navigator
+import cafe.adriel.voyager.transitions.SlideTransition
 import com.kanhaji.basics.theme.BasicKolorTheme
 import com.kanhaji.basics.theme.InitTheme
+import com.mwi.frontend.screens.HomeScreen
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 var isDark by mutableStateOf(false)
@@ -36,29 +27,59 @@ fun App() {
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AppComponent() {
-
-    val scope = rememberCoroutineScope()
-
-    val snackbarHostState = remember { SnackbarHostState() }
-    MySnackBarObject.snackbarHostState = snackbarHostState
-
-
-    Scaffold(
-        topBar = {
-            TopAppBar(
-                title = { Text("My App") },
-                actions = {
-                    IconButton(onClick = { /* Handle action */ }) {
-                        Icon(Icons.Default.Settings, contentDescription = "Settings")
-                    }
-                }
-            )
-        },
-        snackbarHost = { MySnackbarHost() }
-    ) {
-        AppContent("MWI")
+fun AppContent(
+    pageTitle: String
+) {
+    Box(modifier = Modifier.fillMaxSize()) {
+        Scaffold {
+            // Main content area
+            Navigator(HomeScreen) { navigator ->
+                SlideTransition(navigator)
+            }
+        }
     }
 }
+
+//@OptIn(ExperimentalMaterial3Api::class)
+//@Composable
+//fun AppContent(
+//    pageTitle: String,
+//) {
+//    val scope = rememberCoroutineScope()
+//
+//    val snackbarHostState = remember { SnackbarHostState() }
+//    MySnackBarObject.snackbarHostState = snackbarHostState
+//
+//    val listState = rememberLazyListState()
+//    ListState.value = listState
+//
+//    Box {
+//        Scaffold(
+//
+//            topBar = {
+//                TopAppBar(
+//                    title = { Text(pageTitle) },
+//                )
+//            },
+//            snackbarHost = {
+//                MySnackbarHost()
+//            },
+//            modifier = Modifier.fillMaxSize(),
+//        ) { contentPadding ->
+//            Box(modifier = Modifier.fillMaxSize().padding(contentPadding)) {
+//                // Main content area
+//                Navigator(HomeScreen) { navigator ->
+//                    SlideTransition(navigator)
+//                }
+//            }
+////            Navigator(SettingsScreen) { navigator ->
+////                SlideTransition(navigator) { screen ->
+////                    (screen as? SettingsScreen)?.let {
+////                        SettingsComponent(contentPadding)
+////                    }
+////                }
+////            }
+//        }
+//    }
+//}

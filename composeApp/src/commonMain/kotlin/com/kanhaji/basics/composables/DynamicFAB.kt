@@ -3,27 +3,25 @@ package com.kanhaji.basics.composables
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsHoveredAsState
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
@@ -38,15 +36,26 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.pointer.PointerIcon
 import androidx.compose.ui.input.pointer.pointerHoverIcon
 import androidx.compose.ui.unit.dp
+import cafe.adriel.voyager.navigator.LocalNavigator
+import cafe.adriel.voyager.navigator.currentOrThrow
+import com.kanhaji.basics.screens.settings.SettingsScreen
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DynamicFABTemplate() {
+fun DynamicFABTemplate(
+    title: String,
+    showFab: Boolean = true,
+    showBackIcon: Boolean = LocalNavigator.current?.canPop ?: false,
+    showSettingsIcon: Boolean = true,
+    content: @Composable (PaddingValues) -> Unit = {},
+) {
     val scope = rememberCoroutineScope()
 
     val snackbarHostState = remember { SnackbarHostState() }
     MySnackBarObject.snackbarHostState = snackbarHostState
+
+    val navigator = LocalNavigator.currentOrThrow
 
     // Detect scroll direction
     val listState = rememberLazyListState()
@@ -63,63 +72,54 @@ fun DynamicFABTemplate() {
             lastScrollOffset = currentOffset.value
         }
     }
-
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Material 3 Expressive") },
-                colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.primaryContainer,
-                    titleContentColor = MaterialTheme.colorScheme.onPrimaryContainer
-                ),
-                actions = {
-                    IconButton(
-                        onClick = {
+                title = { Text(title) },
+//                colors = TopAppBarDefaults.topAppBarColors(
+//                    containerColor = MaterialTheme.colorScheme.primaryContainer,
+//                    titleContentColor = MaterialTheme.colorScheme.onPrimaryContainer
+//                ),
+                navigationIcon = {
+
+                    if (showBackIcon)
+                        IconButton(onClick = {
                             scope.launch {
-                                showSnackbar("Settings clicked")
+                                navigator.pop()
                             }
-                        },
-                    ) {
-                        Icon(
-                            imageVector = Icons.Filled.Settings,
-                            contentDescription = "Settings",
-                        )
-                    }
+                        }) {
+                            Icon(
+                                imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                                contentDescription = "Back",
+                            )
+                        }
+                },
+                actions = {
+                    if (showSettingsIcon)
+                        IconButton(
+                            onClick = {
+                                scope.launch {
+                                    navigator.push(SettingsScreen)
+                                }
+                            },
+                        ) {
+                            Icon(
+                                imageVector = Icons.Filled.Settings,
+                                contentDescription = "Settings",
+                            )
+                        }
                 }
             )
         },
         snackbarHost = {
-//            SnackbarHost(
-//                hostState = snackbarHostState,
-//                snackbar = { data ->
-//                    CustomSnackbar(data)
-//                }
-//            )
             MySnackbarHost()
         },
         floatingActionButton = {
-            DynamicFab(fabVisible)
+            if (showFab) DynamicFab(fabVisible)
         },
         modifier = Modifier.fillMaxSize(),
     ) { contentPadding ->
-        GenericLazyColumn(
-            items = List(100) { index -> "Item ${index + 1}" },
-            contentPadding = contentPadding,
-            listState = listState
-        ) { index, item ->
-            Text(
-                text = item,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(56.dp)
-                    .wrapContentHeight()
-            )
-        }
-//        Spacer(Modifier.padding(contentPadding))
-//        CardColumnGroup(
-//            items = List(100) { "Item ${it + 1}" },
-//            state = listState
-//        )
+        content(contentPadding)
     }
 }
 

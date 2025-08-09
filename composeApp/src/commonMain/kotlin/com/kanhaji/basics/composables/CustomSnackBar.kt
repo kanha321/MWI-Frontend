@@ -167,7 +167,7 @@ fun CustomSnackbarYesNo(
 
 
 object MySnackBarObject {
-    lateinit var snackbarHostState: SnackbarHostState
+    var snackbarHostState: SnackbarHostState = SnackbarHostState()
     var customContent: (@Composable (SnackbarData) -> Unit)? = null
 }
 
