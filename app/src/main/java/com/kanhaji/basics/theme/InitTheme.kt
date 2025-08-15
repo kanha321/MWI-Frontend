@@ -60,9 +60,9 @@ fun InitTheme() {
 
             // Apply settings to ThemeManager
             ThemeManager.currentThemeType = themeType
-            ThemeManager.isAmoled = savedAmoled
-            ThemeManager.isDynamicColor = isDynamicColor
+            ThemeManager.isAmoled = savedAmoled ?: false
             ThemeManager.isDynamicColorSupported = isDynamicColorSupported()
+            ThemeManager.isDynamicColor = isDynamicColor ?: isDynamicColorSupported()
 
             // Set dark/light theme based on type
             ThemeManager.isDarkTheme = when (themeType) {

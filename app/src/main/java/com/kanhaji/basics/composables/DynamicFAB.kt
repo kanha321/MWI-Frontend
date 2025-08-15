@@ -33,6 +33,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.input.pointer.PointerIcon
 import androidx.compose.ui.input.pointer.pointerHoverIcon
 import androidx.compose.ui.unit.dp
@@ -124,13 +125,19 @@ fun DynamicFABTemplate(
 }
 
 @Composable
-fun DynamicFab(visibility: Boolean) {
+fun DynamicFab(
+    visibility: Boolean,
+    icon: ImageVector = Icons.Filled.Person,
+    contentDescription : String? = null,
+    text: String = "Action",
+    
+) {
     val scope = rememberCoroutineScope()
     val interactionSource = remember { MutableInteractionSource() }
     val isHovered by interactionSource.collectIsHoveredAsState()
 
     // Show text when originally visible OR when hovered and originally hidden
-    val shouldShowText = visibility || (!visibility && isHovered)
+    val shouldShowText = visibility || isHovered
 
     FloatingActionButton(
         onClick = {
@@ -148,15 +155,15 @@ fun DynamicFab(visibility: Boolean) {
             verticalAlignment = Alignment.CenterVertically
         ) {
             Icon(
-                imageVector = Icons.Filled.Person,
-                contentDescription = "",
+                imageVector = icon,
+                contentDescription = contentDescription,
                 modifier = Modifier.padding(8.dp)
             )
             AnimatedVisibility(
                 visible = shouldShowText,
             ) {
                 Spacer(Modifier.width(12.dp))
-                Text("Action", modifier = Modifier.padding(start = 12.dp))
+                Text(text = text, modifier = Modifier.padding(start = 12.dp))
             }
         }
     }

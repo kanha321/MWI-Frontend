@@ -88,6 +88,9 @@ private fun InitializeThemeFromPreferences(systemPrimaryColor: Color, isSystemDa
     LaunchedEffect(Unit) {
         if (!hasInitialized) {
             ThemeManager.defaultSeed = systemPrimaryColor
+            ThemeManager.customColor.value = systemPrimaryColor
+
+            println("MaterialKolorTheme: isDynamicColorSupported: ${isDynamicColorSupported()}")
 
             val savedTheme = PrefsManager.getString(PrefsResources.APP_THEME)
             val savedAmoled = PrefsManager.getBoolean(PrefsResources.IS_AMOLED)
@@ -99,8 +102,8 @@ private fun InitializeThemeFromPreferences(systemPrimaryColor: Color, isSystemDa
                     .getOrDefault(ThemeManager.ThemeType.SYSTEM)
             } ?: ThemeManager.ThemeType.SYSTEM
 
-            ThemeManager.isAmoled = savedAmoled
-            ThemeManager.isDynamicColor = savedDynamic
+            ThemeManager.isAmoled = savedAmoled ?: false
+            ThemeManager.isDynamicColor = savedDynamic ?: isDynamicColorSupported()
             ThemeManager.isDynamicColorSupported = isDynamicColorSupported()
 
             ThemeManager.customColor = mutableStateOf(

@@ -13,6 +13,7 @@ import io.ktor.http.HttpHeaders
 import io.ktor.http.contentType
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
+import io.ktor.client.plugins.HttpTimeout
 
 fun buildHttpClient(engine: HttpClientEngine): HttpClient {
     println("KTOR_HTTP_CLIENT_BUILDING") // Add this line
@@ -33,16 +34,22 @@ fun buildHttpClient(engine: HttpClientEngine): HttpClient {
                     println(message)
                 }
             }
-            level = LogLevel.ALL
+            level = LogLevel.HEADERS
         }
 
-//        install(DefaultRequest) {
+        install(HttpTimeout) {
+            requestTimeoutMillis = 60000
+            connectTimeoutMillis = 30000
+            socketTimeoutMillis = 60000
+        }
+
+//        install(defaultrequest) {
 //            header(HttpHeaders.Authorization, Strings.TOKEN)
 //        }
 //
-        defaultRequest {
-            contentType(ContentType.Application.Json)
-            header(HttpHeaders.ContentType, ContentType.Application.Json)
-        }
+//        defaultRequest {
+//            contentType(ContentType.Application.Json)
+//            header(HttpHeaders.ContentType, ContentType.Application.Json)
+//        }
     }
 }

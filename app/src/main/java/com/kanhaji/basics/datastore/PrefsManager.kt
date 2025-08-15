@@ -65,8 +65,8 @@ object PrefsManager {
         withContext(Dispatchers.Default) { requireStore().remove(intPreferencesKey(key)) }
 
     // Boolean
-    suspend fun getBoolean(key: String) =
-        withContext(Dispatchers.Default) { requireStore().get(booleanPreferencesKey(key)) ?: false }
+    suspend fun getBoolean(key: String) : Boolean? =
+        withContext(Dispatchers.Default) { requireStore().get(booleanPreferencesKey(key)) }
 
     suspend fun saveBoolean(key: String, value: Boolean) =
         withContext(Dispatchers.Default) { requireStore().set(booleanPreferencesKey(key), value) }
