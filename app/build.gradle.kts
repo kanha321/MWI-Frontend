@@ -42,6 +42,9 @@ android {
 
 dependencies {
 
+    implementation("androidx.constraintlayout:constraintlayout:2.2.1")
+//    implementation("androidx.com.google.android.material:1.13.0-alpha11")
+
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
@@ -62,7 +65,8 @@ dependencies {
 
     implementation(libs.material.kolor)
     implementation(libs.colorpicker.compose)
-    implementation(libs.material.icons.core)
+
+//    implementation(libs.material.icons.core)
 
     implementation(libs.kotlinx.serialization.json)
 
@@ -70,11 +74,9 @@ dependencies {
     implementation(libs.ktor.client.okhttp)
 
     implementation(libs.bundles.datastore)
-
-    implementation("androidx.media3:media3-ui:1.3.1")
-    implementation("androidx.media3:media3-exoplayer:1.3.1")
-    implementation("androidx.media3:media3-exoplayer-dash:1.3.1")
-    implementation("io.coil-kt.coil3:coil-compose:3.3.0")
-    implementation("io.coil-kt.coil3:coil-network-okhttp:3.3.0")
+    implementation(libs.bundles.exoplayer)
+    implementation(libs.bundles.coil)
     implementation(libs.ffmpeg)
+
+    implementation(libs.androidx.material.icons.extended)
 }

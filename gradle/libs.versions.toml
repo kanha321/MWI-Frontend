@@ -19,6 +19,8 @@ ktor = "3.2.3"
 datastore = "1.1.7"
 kotlinxSerializationJson = "1.9.0"
 ffmpeg = "6.1.4"
+media3 = "1.8.0"
+coil = "3.3.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -36,6 +38,8 @@ androidx-compose-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-
 androidx-compose-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
 androidx-compose-material3 = { group = "androidx.compose.material3", name = "material3", version.ref = "material3" }
 
+# mdc
+
 # basics
 # voyager
 navigator = { group = "cafe.adriel.voyager", name = "voyager-navigator", version.ref = "voyager" }
@@ -49,6 +53,7 @@ colorpicker-compose = { module = "com.github.skydoves:colorpicker-compose", vers
 
 # icons
 material-icons-core = { module = "org.jetbrains.compose.material:material-icons-core", version.ref = "materialIcons" }
+androidx-material-icons-extended = { group = "androidx.compose.material", name = "material-icons-extended" }
 
 # ktor
 ktor-client-core = { module = "io.ktor:ktor-client-core", version.ref = "ktor" }
@@ -70,6 +75,16 @@ kotlinx-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-
 
 # ffmpeg
 ffmpeg = { module = "com.mrljdx:ffmpeg-kit-full", version.ref = "ffmpeg" }
+
+# exoplayer
+media3-ui = { group = "androidx.media3", name = "media3-ui", version.ref = "media3" }
+media3-exoplayer = { group = "androidx.media3", name = "media3-exoplayer", version.ref = "media3" }
+media3-compose = { group = "androidx.media3", name = "media3-ui-compose", version.ref = "media3" }
+media3-exoplayer-dash = { group = "androidx.media3", name = "media3-exoplayer-dash", version.ref = "media3" }
+
+# coil
+coil-compose = { module = "io.coil-kt.coil3:coil-compose", version.ref = "coil" }
+coil-network-okhttp = { module = "io.coil-kt.coil3:coil-network-okhttp", version.ref = "coil" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
@@ -95,4 +110,16 @@ ktor = [
     "ktor-client-serialization",
     "ktor-serialization-kotlinx-json",
     "ktor-client-auth"
+]
+
+exoplayer = [
+    "media3-ui",
+    "media3-exoplayer",
+    "media3-compose",
+    "media3-exoplayer-dash"
+]
+
+coil = [
+    "coil-compose",
+    "coil-network-okhttp"
 ]

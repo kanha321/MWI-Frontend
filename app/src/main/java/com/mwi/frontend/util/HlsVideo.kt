@@ -15,7 +15,6 @@ import java.io.File
 import java.io.FileOutputStream
 import java.util.concurrent.TimeUnit
 
-var statusText by mutableStateOf("")
 suspend fun convertVideoToHls(context: Context, inputFile: File): File? =
     withContext(Dispatchers.IO) {
         val outputDir = File(context.cacheDir, "hls_${System.currentTimeMillis()}")
@@ -60,7 +59,6 @@ fun copyUriToCacheFile(context: Context, uri: Uri, filename: String): File? {
         val tempFile = File(context.cacheDir, filename)
         val outputStream = FileOutputStream(tempFile)
 
-        statusText = "Copying Video to Cache"
 
         inputStream.use { input ->
             outputStream.use { output ->
@@ -80,7 +78,6 @@ suspend fun convertVideoToDash(context: Context, inputFile: File): File? =
         if (!outputDir.exists()) outputDir.mkdirs()
         val outputMpd = File(outputDir, "index.mpd")
 
-        statusText = "Converting Video to Dash"
         val ffmpegCommand = arrayOf(
             "-i", inputFile.absolutePath,
             "-c", "copy",

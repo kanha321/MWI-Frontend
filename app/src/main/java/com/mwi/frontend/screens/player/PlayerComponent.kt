@@ -21,7 +21,7 @@ import cafe.adriel.voyager.navigator.currentOrThrow
 import com.kanhaji.basics.composables.KButton
 import com.kanhaji.basics.networking.httpClient
 import com.kanhaji.basics.screens.settings.SettingsScreen
-import com.mwi.frontend.ui.components.ExoplayerComponent
+import com.mwi.frontend.ui.components.ExoPlayerComponent
 import io.ktor.client.request.get
 import io.ktor.client.statement.bodyAsText
 import kotlinx.coroutines.launch
@@ -107,7 +107,7 @@ fun PlayerComponent() {
             }
 
             if (showPlayer && videoUrl.isNotBlank()) {
-                ExoplayerComponent(videoUrl = videoUrl)
+                ExoPlayerComponent(videoUrl = videoUrl)
             }
         }
     }

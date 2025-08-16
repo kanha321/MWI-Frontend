@@ -4,37 +4,76 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Upload
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.LoadingIndicator
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import androidx.core.net.toUri
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import com.kanhaji.basics.composables.DynamicFab
+import com.kanhaji.basics.composables.MySnackBarObject
 import com.mwi.frontend.ui.components.Toolbar
 import com.mwi.frontend.ui.components.VideoItem
 import com.mwi.frontend.entity.VideoMetadata
+import com.mwi.frontend.screens.upload.UploadScreen
+import com.mwi.frontend.util.FileType
+import com.mwi.frontend.util.openFilePicker
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 fun HomeComponent(screenModel: HomeScreenModel) {
     val navigator = LocalNavigator.currentOrThrow
+    val context = LocalContext.current
 
     var videoMetadata by remember { mutableStateOf<List<VideoMetadata>>(emptyList()) }
     var isLoading by remember { mutableStateOf(true) }
     var error by remember { mutableStateOf<String?>(null) }
+
+
+    val scope = rememberCoroutineScope()
+
+    val snackbarHostState = remember { SnackbarHostState() }
+    MySnackBarObject.snackbarHostState = snackbarHostState
+
+    // Detect scroll direction
+    val listState = rememberLazyListState()
+    var fabVisible by remember { mutableStateOf(true) }
+    var lastScrollOffset by remember { mutableIntStateOf(0) }
+    val currentOffset = remember {
+        derivedStateOf {
+            listState.firstVisibleItemScrollOffset + listState.firstVisibleItemIndex * 1000
+        }
+    }
+    LaunchedEffect(currentOffset.value) {
+        if (listState.isScrollInProgress) {
+            fabVisible = currentOffset.value < lastScrollOffset
+            lastScrollOffset = currentOffset.value
+        }
+    }
 
     LaunchedEffect(Unit) {
         try {
@@ -53,7 +92,24 @@ fun HomeComponent(screenModel: HomeScreenModel) {
             Toolbar()
         },
         floatingActionButton = {
-            DynamicFab(visibility = true)
+            DynamicFab(
+                visibility = fabVisible,
+                icon = Icons.Default.Upload,
+                text = "Upload Video",
+                shape = RoundedCornerShape(100)
+            ) {
+                scope.launch {
+                    openFilePicker(context = context, type = FileType.VIDEO) { uri ->
+                        if (uri == null) {
+                            scope.launch {
+                                snackbarHostState.showSnackbar("No file selected")
+                            }
+                            return@openFilePicker
+                        }
+                        navigator.push(UploadScreen(uri))
+                    }
+                }
+            }
         }
     ) { innerPadding ->
         if (isLoading) {
@@ -64,7 +120,9 @@ fun HomeComponent(screenModel: HomeScreenModel) {
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center
             ) {
-                LoadingIndicator()
+                LoadingIndicator(
+                    modifier = Modifier.size(250.dp)
+                )
             }
         } else if (error != null) {
             Column(
@@ -81,6 +139,7 @@ fun HomeComponent(screenModel: HomeScreenModel) {
             }
         } else {
             LazyColumn(
+                state = listState,
                 modifier = Modifier.padding(innerPadding),
             ) {
                 itemsIndexed(videoMetadata) { _, video ->

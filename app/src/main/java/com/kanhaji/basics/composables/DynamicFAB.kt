@@ -10,12 +10,14 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.FloatingActionButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
@@ -33,6 +35,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.input.pointer.PointerIcon
 import androidx.compose.ui.input.pointer.pointerHoverIcon
@@ -130,7 +133,8 @@ fun DynamicFab(
     icon: ImageVector = Icons.Filled.Person,
     contentDescription : String? = null,
     text: String = "Action",
-    
+    shape: Shape = FloatingActionButtonDefaults.shape,
+    onClick: () -> Unit = { }
 ) {
     val scope = rememberCoroutineScope()
     val interactionSource = remember { MutableInteractionSource() }
@@ -140,13 +144,8 @@ fun DynamicFab(
     val shouldShowText = visibility || isHovered
 
     FloatingActionButton(
-        onClick = {
-            scope.launch {
-                showSnackbar("Snackbar") { data ->
-                    CustomSnackbarYesNo(data)
-                }
-            }
-        },
+        onClick = { onClick() },
+        shape = shape,
         interactionSource = interactionSource,
         modifier = Modifier.pointerHoverIcon(PointerIcon.Hand)
     ) {
@@ -162,8 +161,8 @@ fun DynamicFab(
             AnimatedVisibility(
                 visible = shouldShowText,
             ) {
-                Spacer(Modifier.width(12.dp))
-                Text(text = text, modifier = Modifier.padding(start = 12.dp))
+                Spacer(Modifier.width(2.dp))
+                Text(text = text, modifier = Modifier.padding(start = 4.dp))
             }
         }
     }

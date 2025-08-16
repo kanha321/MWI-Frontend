@@ -39,7 +39,6 @@ import com.mwi.frontend.util.FileType
 import com.mwi.frontend.util.Resources
 import com.mwi.frontend.util.createDashFromUri
 import com.mwi.frontend.util.openFilePicker
-import com.mwi.frontend.util.statusText
 import io.ktor.client.call.body
 import io.ktor.client.request.forms.InputProvider
 import io.ktor.client.request.forms.MultiPartFormDataContent
@@ -66,6 +65,7 @@ fun HomeComponentTest() {
     var file by remember { mutableStateOf<String?>(null) }
     val context = LocalContext.current
     var hls by remember { mutableStateOf(emptyList<File>()) }
+    var statusText by remember { mutableStateOf("Ready") }
 
 
     Scaffold(

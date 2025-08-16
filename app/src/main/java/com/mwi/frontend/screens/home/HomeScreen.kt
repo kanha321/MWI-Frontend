@@ -3,8 +3,6 @@ package com.mwi.frontend.screens.home
 import androidx.compose.runtime.Composable
 import cafe.adriel.voyager.core.model.rememberScreenModel
 import cafe.adriel.voyager.core.screen.Screen
-import com.mwi.frontend.screens.upload.UploadComponent
-import com.mwi.frontend.screens.upload.UploadScreenModel
 
 object HomeScreen: Screen {
 
@@ -13,8 +11,8 @@ object HomeScreen: Screen {
     @Composable
     override fun Content() {
         val screenModel = rememberScreenModel {
-            UploadScreenModel()
+            HomeScreenModel()
         }
-        UploadComponent(screenModel)
+        HomeComponent(screenModel)
     }
 }
