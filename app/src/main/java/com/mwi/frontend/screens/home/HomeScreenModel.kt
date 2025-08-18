@@ -7,6 +7,7 @@ import com.mwi.frontend.util.Resources
 import io.ktor.client.call.body
 import io.ktor.client.request.get
 import io.ktor.client.request.header
+import io.ktor.client.statement.bodyAsText
 import io.ktor.http.ContentType
 import io.ktor.http.HttpHeaders
 import io.ktor.http.contentType
@@ -17,6 +18,7 @@ class HomeScreenModel : ScreenModel {
             contentType(ContentType.Application.Json)
             header(HttpHeaders.ContentType, ContentType.Application.Json)
         }
+        println(response.bodyAsText())
         val videos = response.body<List<VideoMetadata>>()
 
         return videos

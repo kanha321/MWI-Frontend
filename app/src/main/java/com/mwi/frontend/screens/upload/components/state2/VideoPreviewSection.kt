@@ -16,6 +16,7 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -33,7 +34,7 @@ fun VideoPreviewSection(
     onCurrentPositionChanged: (Long) -> Unit = {},
     onPlayerReady: (ExoPlayer) -> Unit = {} // Add this parameter
 ) {
-    Card(
+    OutlinedCard(
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 16.dp),

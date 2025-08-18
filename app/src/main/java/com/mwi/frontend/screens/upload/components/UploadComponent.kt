@@ -28,6 +28,8 @@ import androidx.compose.ui.unit.dp
 import com.mwi.frontend.screens.upload.UploadScreenModel
 import com.mwi.frontend.screens.upload.components.state1.CopyingComponent
 import com.mwi.frontend.screens.upload.components.state2.PreviewComponent
+import com.mwi.frontend.screens.upload.components.state3.InfoComponent
+import com.mwi.frontend.screens.upload.components.state4.UploadingComponent
 import com.mwi.frontend.ui.components.Toolbar
 
 @Composable
@@ -93,10 +95,10 @@ fun UploadComponent(screenModel: UploadScreenModel) {
                                 PreviewComponent(screenModel = screenModel)
                             }
                             is UploadScreenModel.UploadStep.Details -> {
-                                DetailsPlaceholder()
+                                InfoComponent(screenModel = screenModel)
                             }
                             is UploadScreenModel.UploadStep.Uploading -> {
-                                UploadingPlaceholder()
+                                UploadingComponent(screenModel = screenModel)
                             }
                             is UploadScreenModel.UploadStep.Completed -> {
                                 CompletedPlaceholder()
@@ -192,24 +194,6 @@ private fun canProceedToNextStep(screenModel: UploadScreenModel): Boolean {
         is UploadScreenModel.UploadStep.Uploading -> false
         is UploadScreenModel.UploadStep.Completed -> false
     }
-}
-
-@Composable
-private fun DetailsPlaceholder() {
-    Text(
-        text = "Details Screen - Coming Soon",
-        modifier = Modifier.padding(16.dp),
-        style = MaterialTheme.typography.headlineSmall
-    )
-}
-
-@Composable
-private fun UploadingPlaceholder() {
-    Text(
-        text = "Uploading Screen - Coming Soon",
-        modifier = Modifier.padding(16.dp),
-        style = MaterialTheme.typography.headlineSmall
-    )
 }
 
 @Composable

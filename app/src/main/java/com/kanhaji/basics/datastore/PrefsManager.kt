@@ -14,7 +14,7 @@ interface PreferencesDataStore {
     suspend fun clear()
 }
 
-private var DATASTORE_NAME = "app_prefs"
+private var DATASTORE_NAME = "mwi_prefs"
 private val Context.dataStore by preferencesDataStore(DATASTORE_NAME)
 
 class AndroidPreferencesDataStore(private val context: Context) : PreferencesDataStore {

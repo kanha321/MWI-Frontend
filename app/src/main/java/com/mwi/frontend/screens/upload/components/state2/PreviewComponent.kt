@@ -23,6 +23,7 @@ import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.ProgressIndicatorDefaults
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -56,7 +57,7 @@ fun PreviewComponent(
 
     val previewUri: String = screenModel.cachedVideoPath
         ?.let { Uri.fromFile(File(it)).toString() } // file://...
-        ?: screenModel.fileUri                      // content://...
+        ?: screenModel.fileUri                                 // content://...
 
 
     val navigator = LocalNavigator.currentOrThrow
@@ -88,7 +89,7 @@ fun PreviewComponent(
     Spacer(modifier = Modifier.height(16.dp))
 
     // Thumbnail Section
-    Card(
+    OutlinedCard(
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 16.dp),
@@ -138,10 +139,9 @@ fun PreviewComponent(
                     onClick = {
                         exoPlayerInstance?.let { player ->
                             scope.launch {
-                                val extractedFramePath = screenModel.extractFrameFromExoPlayer(
+                                val extractedFramePath = screenModel.extractFrameWithFfmpeg(
                                     context = context,
-                                    exoPlayer = player,
-                                    timeInMillis = screenModel.extractFrameAt // Pass the saved position
+                                    timeInMillis = screenModel.extractFrameAt
                                 )
                                 extractedFramePath?.let { path ->
                                     screenModel.thumbnailUri = path

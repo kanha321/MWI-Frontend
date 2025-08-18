@@ -1,0 +1,134 @@
+when i convert the video i get this in logs
+
+2025-08-18 00:19:16.916  5950-6044  ffmpeg-kit              com.mwi.frontend                     I  Input #0, mov,mp4,m4a,3gp,3g2,mj2, from '/data/user/0/com.mwi.frontend/cache/UploadCache/temp_video_1755456478524.mp4':
+2025-08-18 00:19:16.916  5950-6044  ffmpeg-kit              com.mwi.frontend                     I    Metadata:
+2025-08-18 00:19:16.916  5950-6044  ffmpeg-kit              com.mwi.frontend                     I      major_brand     :
+2025-08-18 00:19:16.916  5950-6044  ffmpeg-kit              com.mwi.frontend                     I  mp42
+2025-08-18 00:19:16.916  5950-6044  ffmpeg-kit              com.mwi.frontend                     I
+2025-08-18 00:19:16.917  5950-6044  ffmpeg-kit              com.mwi.frontend                     I      minor_version   :
+2025-08-18 00:19:16.917  5950-6044  ffmpeg-kit              com.mwi.frontend                     I  0
+2025-08-18 00:19:16.917  5950-6044  ffmpeg-kit              com.mwi.frontend                     I
+2025-08-18 00:19:16.917  5950-6044  ffmpeg-kit              com.mwi.frontend                     I      compatible_brands:
+2025-08-18 00:19:16.917  5950-6044  ffmpeg-kit              com.mwi.frontend                     I  mp42isom
+2025-08-18 00:19:16.917  5950-6044  ffmpeg-kit              com.mwi.frontend                     I
+2025-08-18 00:19:16.917  5950-6044  ffmpeg-kit              com.mwi.frontend                     I    Duration:
+2025-08-18 00:19:16.917  5950-6044  ffmpeg-kit              com.mwi.frontend                     I  00:00:38.96
+2025-08-18 00:19:16.917  5950-6044  ffmpeg-kit              com.mwi.frontend                     I  , start:
+2025-08-18 00:19:16.918  5950-6044  ffmpeg-kit              com.mwi.frontend                     I  0.000000
+2025-08-18 00:19:16.918  5950-6044  ffmpeg-kit              com.mwi.frontend                     I  , bitrate:
+2025-08-18 00:19:16.918  5950-6044  ffmpeg-kit              com.mwi.frontend                     I  1485 kb/s
+2025-08-18 00:19:16.918  5950-6044  ffmpeg-kit              com.mwi.frontend                     I
+2025-08-18 00:19:16.918  5950-6044  ffmpeg-kit              com.mwi.frontend                     I    Stream #0:0
+2025-08-18 00:19:16.918  5950-6044  ffmpeg-kit              com.mwi.frontend                     I  [0x1]
+2025-08-18 00:19:16.918  5950-6044  ffmpeg-kit              com.mwi.frontend                     I  (und)
+2025-08-18 00:19:16.918  5950-6044  ffmpeg-kit              com.mwi.frontend                     I  : Video: h264 (avc1 / 0x31637661), yuv420p(tv, bt709, progressive), 848x480, 1421 kb/s
+2025-08-18 00:19:16.918  5950-6044  ffmpeg-kit              com.mwi.frontend                     I  ,
+2025-08-18 00:19:16.919  5950-6044  ffmpeg-kit              com.mwi.frontend                     I  29.33 fps,
+2025-08-18 00:19:16.920  5950-6044  ffmpeg-kit              com.mwi.frontend                     I  30 tbr,
+2025-08-18 00:19:16.920  5950-6044  ffmpeg-kit              com.mwi.frontend                     I  600 tbn
+2025-08-18 00:19:16.920  5950-6044  ffmpeg-kit              com.mwi.frontend                     I   (default)
+2025-08-18 00:19:16.920  5950-6044  ffmpeg-kit              com.mwi.frontend                     I
+2025-08-18 00:19:16.920  5950-6044  ffmpeg-kit              com.mwi.frontend                     I      Metadata:
+2025-08-18 00:19:16.921  5950-6044  ffmpeg-kit              com.mwi.frontend                     I        vendor_id       :
+2025-08-18 00:19:16.921  5950-6044  ffmpeg-kit              com.mwi.frontend                     I  [0][0][0][0]
+2025-08-18 00:19:16.921  5950-6044  ffmpeg-kit              com.mwi.frontend                     I
+2025-08-18 00:19:16.921  5950-6044  ffmpeg-kit              com.mwi.frontend                     I      Side data:
+2025-08-18 00:19:16.922  5950-6044  ffmpeg-kit              com.mwi.frontend                     I
+2025-08-18 00:19:16.922  5950-6044  ffmpeg-kit              com.mwi.frontend                     I  displaymatrix: rotation of -90.00 degrees
+2025-08-18 00:19:16.922  5950-6044  ffmpeg-kit              com.mwi.frontend                     I
+2025-08-18 00:19:16.922  5950-6044  ffmpeg-kit              com.mwi.frontend                     I    Stream #0:1
+2025-08-18 00:19:16.922  5950-6044  ffmpeg-kit              com.mwi.frontend                     I  [0x2]
+2025-08-18 00:19:16.922  5950-6044  ffmpeg-kit              com.mwi.frontend                     I  (und)
+2025-08-18 00:19:16.922  5950-6044  ffmpeg-kit              com.mwi.frontend                     I  : Audio: aac (mp4a / 0x6134706D), 44100 Hz, stereo, fltp, 63 kb/s
+2025-08-18 00:19:16.922  5950-6044  ffmpeg-kit              com.mwi.frontend                     I   (default)
+2025-08-18 00:19:16.923  5950-6044  ffmpeg-kit              com.mwi.frontend                     I
+2025-08-18 00:19:16.923  5950-6044  ffmpeg-kit              com.mwi.frontend                     I      Metadata:
+2025-08-18 00:19:16.923  5950-6044  ffmpeg-kit              com.mwi.frontend                     I        vendor_id       :
+2025-08-18 00:19:16.923  5950-6044  ffmpeg-kit              com.mwi.frontend                     I  [0][0][0][0]
+2025-08-18 00:19:16.923  5950-6044  ffmpeg-kit              com.mwi.frontend                     I
+2025-08-18 00:19:16.923  5950-6044  ffmpeg-kit              com.mwi.frontend                     I  [dash @ 0xb4000077626117d0] Opening '/data/user/0/com.mwi.frontend/cache/UploadCache/dash_temp_video_1755456478524_1755456556894/init_0.m4s' for writing
+2025-08-18 00:19:16.923  5950-6044  ffmpeg-kit              com.mwi.frontend                     I  [dash @ 0xb4000077626117d0] Opening '/data/user/0/com.mwi.frontend/cache/UploadCache/dash_temp_video_1755456478524_1755456556894/init_1.m4s' for writing
+2025-08-18 00:19:16.923  5950-6044  ffmpeg-kit              com.mwi.frontend                     I  Output #0, dash, to '/data/user/0/com.mwi.frontend/cache/UploadCache/dash_temp_video_1755456478524_1755456556894/index.mpd':
+2025-08-18 00:19:16.923  5950-6044  ffmpeg-kit              com.mwi.frontend                     I    Metadata:
+2025-08-18 00:19:16.923  5950-6044  ffmpeg-kit              com.mwi.frontend                     I      major_brand     :
+2025-08-18 00:19:16.923  5950-6044  ffmpeg-kit              com.mwi.frontend                     I  mp42
+2025-08-18 00:19:16.923  5950-6044  ffmpeg-kit              com.mwi.frontend                     I
+2025-08-18 00:19:16.924  5950-6044  ffmpeg-kit              com.mwi.frontend                     I      minor_version   :
+2025-08-18 00:19:16.924  5950-6044  ffmpeg-kit              com.mwi.frontend                     I  0
+2025-08-18 00:19:16.924  5950-6044  ffmpeg-kit              com.mwi.frontend                     I
+2025-08-18 00:19:16.924  5950-6044  ffmpeg-kit              com.mwi.frontend                     I      compatible_brands:
+2025-08-18 00:19:16.924  5950-6044  ffmpeg-kit              com.mwi.frontend                     I  mp42isom
+2025-08-18 00:19:16.924  5950-6044  ffmpeg-kit              com.mwi.frontend                     I
+2025-08-18 00:19:16.924  5950-6044  ffmpeg-kit              com.mwi.frontend                     I      encoder         :
+2025-08-18 00:19:16.924  5950-6044  ffmpeg-kit              com.mwi.frontend                     I  Lavf60.16.100
+2025-08-18 00:19:16.924  5950-6044  ffmpeg-kit              com.mwi.frontend                     I
+2025-08-18 00:19:16.924  5950-6044  ffmpeg-kit              com.mwi.frontend                     I    Stream #0:0
+2025-08-18 00:19:16.924  5950-6044  ffmpeg-kit              com.mwi.frontend                     I  (und)
+2025-08-18 00:19:16.925  5950-6044  ffmpeg-kit              com.mwi.frontend                     I  : Video: h264 (avc1 / 0x31637661), yuv420p(tv, bt709, progressive), 848x480, q=2-31, 1421 kb/s
+2025-08-18 00:19:16.925  5950-6044  ffmpeg-kit              com.mwi.frontend                     I  ,
+2025-08-18 00:19:16.925  5950-6044  ffmpeg-kit              com.mwi.frontend                     I  29.33 fps,
+2025-08-18 00:19:16.925  5950-6044  ffmpeg-kit              com.mwi.frontend                     I  30 tbr,
+2025-08-18 00:19:16.925  5950-6044  ffmpeg-kit              com.mwi.frontend                     I  19200 tbn
+2025-08-18 00:19:16.925  5950-6044  ffmpeg-kit              com.mwi.frontend                     I   (default)
+2025-08-18 00:19:16.925  5950-6044  ffmpeg-kit              com.mwi.frontend                     I
+2025-08-18 00:19:16.925  5950-6044  ffmpeg-kit              com.mwi.frontend                     I      Metadata:
+2025-08-18 00:19:16.925  5950-6044  ffmpeg-kit              com.mwi.frontend                     I        vendor_id       :
+2025-08-18 00:19:16.925  5950-6044  ffmpeg-kit              com.mwi.frontend                     I  [0][0][0][0]
+2025-08-18 00:19:16.925  5950-6044  ffmpeg-kit              com.mwi.frontend                     I
+2025-08-18 00:19:16.925  5950-6044  ffmpeg-kit              com.mwi.frontend                     I      Side data:
+2025-08-18 00:19:16.925  5950-6044  ffmpeg-kit              com.mwi.frontend                     I
+2025-08-18 00:19:16.925  5950-6044  ffmpeg-kit              com.mwi.frontend                     I  displaymatrix: rotation of -90.00 degrees
+2025-08-18 00:19:16.925  5950-6044  ffmpeg-kit              com.mwi.frontend                     I
+2025-08-18 00:19:16.925  5950-6044  ffmpeg-kit              com.mwi.frontend                     I    Stream #0:1
+2025-08-18 00:19:16.926  5950-6044  ffmpeg-kit              com.mwi.frontend                     I  (und)
+2025-08-18 00:19:16.926  5950-6044  ffmpeg-kit              com.mwi.frontend                     I  : Audio: aac (mp4a / 0x6134706D), 44100 Hz, stereo, fltp, 63 kb/s
+2025-08-18 00:19:16.926  5950-6044  ffmpeg-kit              com.mwi.frontend                     I   (default)
+2025-08-18 00:19:16.926  5950-6044  ffmpeg-kit              com.mwi.frontend                     I
+2025-08-18 00:19:16.926  5950-6044  ffmpeg-kit              com.mwi.frontend                     I      Metadata:
+2025-08-18 00:19:16.926  5950-6044  ffmpeg-kit              com.mwi.frontend                     I        vendor_id       :
+2025-08-18 00:19:16.926  5950-6044  ffmpeg-kit              com.mwi.frontend                     I  [0][0][0][0]
+2025-08-18 00:19:16.926  5950-6044  ffmpeg-kit              com.mwi.frontend                     I
+2025-08-18 00:19:16.926  5950-6044  ffmpeg-kit              com.mwi.frontend                     I  Stream mapping:
+2025-08-18 00:19:16.926  5950-6044  ffmpeg-kit              com.mwi.frontend                     I    Stream #0:0 -> #0:0
+2025-08-18 00:19:16.927  5950-6044  ffmpeg-kit              com.mwi.frontend                     I   (copy)
+2025-08-18 00:19:16.927  5950-6044  ffmpeg-kit              com.mwi.frontend                     I
+2025-08-18 00:19:16.927  5950-6044  ffmpeg-kit              com.mwi.frontend                     I    Stream #0:1 -> #0:1
+2025-08-18 00:19:16.927  5950-6044  ffmpeg-kit              com.mwi.frontend                     I   (copy)
+2025-08-18 00:19:16.927  5950-6044  ffmpeg-kit              com.mwi.frontend                     I
+2025-08-18 00:19:16.927  5950-6044  ffmpeg-kit              com.mwi.frontend                     I  Press [q] to stop, [?] for help
+2025-08-18 00:19:16.927  5950-6044  ffmpeg-kit              com.mwi.frontend                     I  size=       0kB time=00:00:00.00 bitrate=N/A speed=N/A
+2025-08-18 00:19:16.928  5950-6044  ffmpeg-kit              com.mwi.frontend                     I  [dash @ 0xb4000077626117d0] Opening '/data/user/0/com.mwi.frontend/cache/UploadCache/dash_temp_video_1755456478524_1755456556894/chunk_0_00001.m4s.tmp' for writing
+2025-08-18 00:19:16.928  5950-6044  ffmpeg-kit              com.mwi.frontend                     I  [dash @ 0xb4000077626117d0] Opening '/data/user/0/com.mwi.frontend/cache/UploadCache/dash_temp_video_1755456478524_1755456556894/chunk_1_00001.m4s.tmp' for writing
+2025-08-18 00:19:16.928  5950-6044  ffmpeg-kit              com.mwi.frontend                     I  [dash @ 0xb4000077626117d0] Opening '/data/user/0/com.mwi.frontend/cache/UploadCache/dash_temp_video_1755456478524_1755456556894/index.mpd.tmp' for writing
+2025-08-18 00:19:16.928  5950-6044  ffmpeg-kit              com.mwi.frontend                     I  [dash @ 0xb4000077626117d0] Opening '/data/user/0/com.mwi.frontend/cache/UploadCache/dash_temp_video_1755456478524_1755456556894/chunk_0_00002.m4s.tmp' for writing
+2025-08-18 00:19:16.928  5950-6044  ffmpeg-kit              com.mwi.frontend                     I  [dash @ 0xb4000077626117d0] Opening '/data/user/0/com.mwi.frontend/cache/UploadCache/dash_temp_video_1755456478524_1755456556894/chunk_1_00002.m4s.tmp' for writing
+2025-08-18 00:19:16.933  5950-6044  ffmpeg-kit              com.mwi.frontend                     I  [dash @ 0xb4000077626117d0] Opening '/data/user/0/com.mwi.frontend/cache/UploadCache/dash_temp_video_1755456478524_1755456556894/index.mpd.tmp' for writing
+2025-08-18 00:19:16.933  5950-6044  ffmpeg-kit              com.mwi.frontend                     I  [dash @ 0xb4000077626117d0] Opening '/data/user/0/com.mwi.frontend/cache/UploadCache/dash_temp_video_1755456478524_1755456556894/chunk_0_00003.m4s.tmp' for writing
+2025-08-18 00:19:16.933  5950-6044  ffmpeg-kit              com.mwi.frontend                     I  [dash @ 0xb4000077626117d0] Opening '/data/user/0/com.mwi.frontend/cache/UploadCache/dash_temp_video_1755456478524_1755456556894/chunk_1_00003.m4s.tmp' for writing
+2025-08-18 00:19:16.938  5950-6044  ffmpeg-kit              com.mwi.frontend                     I  [dash @ 0xb4000077626117d0] Opening '/data/user/0/com.mwi.frontend/cache/UploadCache/dash_temp_video_1755456478524_1755456556894/index.mpd.tmp' for writing
+2025-08-18 00:19:16.938  5950-6044  ffmpeg-kit              com.mwi.frontend                     I  [dash @ 0xb4000077626117d0] Opening '/data/user/0/com.mwi.frontend/cache/UploadCache/dash_temp_video_1755456478524_1755456556894/chunk_0_00004.m4s.tmp' for writing
+2025-08-18 00:19:16.938  5950-6044  ffmpeg-kit              com.mwi.frontend                     I  [dash @ 0xb4000077626117d0] Opening '/data/user/0/com.mwi.frontend/cache/UploadCache/dash_temp_video_1755456478524_1755456556894/chunk_1_00004.m4s.tmp' for writing
+2025-08-18 00:19:16.941  5950-6044  ffmpeg-kit              com.mwi.frontend                     I  [dash @ 0xb4000077626117d0] Opening '/data/user/0/com.mwi.frontend/cache/UploadCache/dash_temp_video_1755456478524_1755456556894/index.mpd.tmp' for writing
+2025-08-18 00:19:16.941  5950-6044  ffmpeg-kit              com.mwi.frontend                     I  [dash @ 0xb4000077626117d0] Opening '/data/user/0/com.mwi.frontend/cache/UploadCache/dash_temp_video_1755456478524_1755456556894/chunk_0_00005.m4s.tmp' for writing
+2025-08-18 00:19:16.941  5950-6044  ffmpeg-kit              com.mwi.frontend                     I  [dash @ 0xb4000077626117d0] Opening '/data/user/0/com.mwi.frontend/cache/UploadCache/dash_temp_video_1755456478524_1755456556894/chunk_1_00005.m4s.tmp' for writing
+2025-08-18 00:19:16.945  5950-6044  ffmpeg-kit              com.mwi.frontend                     I  [dash @ 0xb4000077626117d0] Opening '/data/user/0/com.mwi.frontend/cache/UploadCache/dash_temp_video_1755456478524_1755456556894/index.mpd.tmp' for writing
+2025-08-18 00:19:16.945  5950-6044  ffmpeg-kit              com.mwi.frontend                     I  [dash @ 0xb4000077626117d0] Opening '/data/user/0/com.mwi.frontend/cache/UploadCache/dash_temp_video_1755456478524_1755456556894/chunk_0_00006.m4s.tmp' for writing
+2025-08-18 00:19:16.946  5950-6044  ffmpeg-kit              com.mwi.frontend                     I  [dash @ 0xb4000077626117d0] Opening '/data/user/0/com.mwi.frontend/cache/UploadCache/dash_temp_video_1755456478524_1755456556894/chunk_1_00006.m4s.tmp' for writing
+2025-08-18 00:19:16.949  5950-6044  ffmpeg-kit              com.mwi.frontend                     I  [dash @ 0xb4000077626117d0] Opening '/data/user/0/com.mwi.frontend/cache/UploadCache/dash_temp_video_1755456478524_1755456556894/index.mpd.tmp' for writing
+2025-08-18 00:19:16.949  5950-6044  ffmpeg-kit              com.mwi.frontend                     I  [dash @ 0xb4000077626117d0] Opening '/data/user/0/com.mwi.frontend/cache/UploadCache/dash_temp_video_1755456478524_1755456556894/chunk_0_00007.m4s.tmp' for writing
+2025-08-18 00:19:16.950  5950-6044  ffmpeg-kit              com.mwi.frontend                     I  [dash @ 0xb4000077626117d0] Opening '/data/user/0/com.mwi.frontend/cache/UploadCache/dash_temp_video_1755456478524_1755456556894/chunk_1_00007.m4s.tmp' for writing
+2025-08-18 00:19:16.954  5950-6044  ffmpeg-kit              com.mwi.frontend                     I  [dash @ 0xb4000077626117d0] Opening '/data/user/0/com.mwi.frontend/cache/UploadCache/dash_temp_video_1755456478524_1755456556894/index.mpd.tmp' for writing
+2025-08-18 00:19:16.955  5950-6044  ffmpeg-kit              com.mwi.frontend                     I  [dash @ 0xb4000077626117d0] Opening '/data/user/0/com.mwi.frontend/cache/UploadCache/dash_temp_video_1755456478524_1755456556894/chunk_0_00008.m4s.tmp' for writing
+2025-08-18 00:19:16.955  5950-6044  ffmpeg-kit              com.mwi.frontend                     I  [dash @ 0xb4000077626117d0] Opening '/data/user/0/com.mwi.frontend/cache/UploadCache/dash_temp_video_1755456478524_1755456556894/chunk_1_00008.m4s.tmp' for writing
+2025-08-18 00:19:16.959  5950-6044  ffmpeg-kit              com.mwi.frontend                     I  [dash @ 0xb4000077626117d0] Opening '/data/user/0/com.mwi.frontend/cache/UploadCache/dash_temp_video_1755456478524_1755456556894/index.mpd.tmp' for writing
+2025-08-18 00:19:16.959  5950-6044  ffmpeg-kit              com.mwi.frontend                     I  [dash @ 0xb4000077626117d0] Opening '/data/user/0/com.mwi.frontend/cache/UploadCache/dash_temp_video_1755456478524_1755456556894/chunk_0_00009.m4s.tmp' for writing
+2025-08-18 00:19:16.959  5950-6044  ffmpeg-kit              com.mwi.frontend                     I  [dash @ 0xb4000077626117d0] Opening '/data/user/0/com.mwi.frontend/cache/UploadCache/dash_temp_video_1755456478524_1755456556894/chunk_1_00009.m4s.tmp' for writing
+2025-08-18 00:19:16.964  5950-6044  ffmpeg-kit              com.mwi.frontend                     I  [dash @ 0xb4000077626117d0] Opening '/data/user/0/com.mwi.frontend/cache/UploadCache/dash_temp_video_1755456478524_1755456556894/index.mpd.tmp' for writing
+2025-08-18 00:19:16.964  5950-6044  ffmpeg-kit              com.mwi.frontend                     I  [dash @ 0xb4000077626117d0] Opening '/data/user/0/com.mwi.frontend/cache/UploadCache/dash_temp_video_1755456478524_1755456556894/chunk_0_00010.m4s.tmp' for writing
+2025-08-18 00:19:16.964  5950-6044  ffmpeg-kit              com.mwi.frontend                     I  [dash @ 0xb4000077626117d0] Opening '/data/user/0/com.mwi.frontend/cache/UploadCache/dash_temp_video_1755456478524_1755456556894/chunk_1_00010.m4s.tmp' for writing
+2025-08-18 00:19:16.966  5950-6044  ffmpeg-kit              com.mwi.frontend                     I  [dash @ 0xb4000077626117d0] Opening '/data/user/0/com.mwi.frontend/cache/UploadCache/dash_temp_video_1755456478524_1755456556894/index.mpd.tmp' for writing
+2025-08-18 00:19:16.966  5950-6044  ffmpeg-kit              com.mwi.frontend                     I  [out#0/dash @ 0xb400007712641b10] video:6751kB audio:302kB subtitle:0kB other streams:0kB global headers:0kB muxing overhead: unknown
+2025-08-18 00:19:16.967  5950-6044  ffmpeg-kit              com.mwi.frontend                     I  size=N/A time=00:00:38.93 bitrate=N/A speed= 774x
+
+
+i want to show these details in an amazing ui to show the progress of conversion in uploadingComponent
