@@ -1,7 +1,7 @@
 package com.mwi.frontend.ui.components
 
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.runtime.Composable
@@ -20,7 +20,7 @@ fun NavigationActions(
             }
         ) {
             Icon(
-                imageVector = Icons.Default.Settings,
+                imageVector = Icons.Outlined.Settings,
                 contentDescription = "Settings"
             )
         }

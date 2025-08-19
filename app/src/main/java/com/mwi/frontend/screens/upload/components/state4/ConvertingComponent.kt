@@ -175,6 +175,7 @@ fun ConvertingComponent(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 if (screenModel.dashPhase == "Completed") {
+                    screenModel.dashProgress = 1f
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         Icon(
                             Icons.Default.TaskAlt,

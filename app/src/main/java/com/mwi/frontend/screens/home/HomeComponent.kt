@@ -17,6 +17,8 @@ import androidx.compose.material3.LoadingIndicator
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
+import androidx.compose.material3.pulltorefresh.PullToRefreshBox
+import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
@@ -30,12 +32,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import androidx.core.net.toUri
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import com.kanhaji.basics.composables.DynamicFab
 import com.kanhaji.basics.composables.MySnackBarObject
-import com.mwi.frontend.ui.components.Toolbar
+import com.mwi.frontend.ui.components.KAppBar
 import com.mwi.frontend.ui.components.VideoItem
 import com.mwi.frontend.entity.VideoMetadata
 import com.mwi.frontend.screens.upload.UploadScreen
@@ -89,7 +90,7 @@ fun HomeComponent(screenModel: HomeScreenModel) {
 
     Scaffold(
         topBar = {
-            Toolbar()
+            KAppBar()
         },
         floatingActionButton = {
             DynamicFab(
@@ -112,38 +113,58 @@ fun HomeComponent(screenModel: HomeScreenModel) {
             }
         }
     ) { innerPadding ->
-        if (isLoading) {
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(innerPadding),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center
-            ) {
-                LoadingIndicator(
-                    modifier = Modifier.size(250.dp)
-                )
+        PullToRefreshBox(
+            modifier = Modifier.fillMaxSize(),
+            contentAlignment = Alignment.Center,
+            isRefreshing = isLoading,
+            state = rememberPullToRefreshState(),
+            onRefresh = {
+                scope.launch {
+                    try {
+                        isLoading = true
+                        videoMetadata = screenModel.getAllVideos()
+                        error = null
+                    } catch (e: Exception) {
+                        error = e.message
+                    } finally {
+                        isLoading = false
+                    }
+                }
             }
-        } else if (error != null) {
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(innerPadding),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center
-            ) {
-                Text(
-                    text = "Error: ${error ?: "Unknown error"}",
-                    modifier = Modifier.padding(16.dp)
-                )
-            }
-        } else {
-            LazyColumn(
-                state = listState,
-                modifier = Modifier.padding(innerPadding),
-            ) {
-                itemsIndexed(videoMetadata) { _, video ->
-                    VideoItem(video)
+        ) {
+            if (isLoading) {
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(innerPadding),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center
+                ) {
+                    LoadingIndicator(
+                        modifier = Modifier.size(250.dp)
+                    )
+                }
+            } else if (error != null) {
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(innerPadding),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center
+                ) {
+                    Text(
+                        text = "Error: ${error ?: "Unknown error"}",
+                        modifier = Modifier.padding(16.dp)
+                    )
+                }
+            } else {
+                LazyColumn(
+                    state = listState,
+                    modifier = Modifier.padding(innerPadding),
+                ) {
+                    itemsIndexed(videoMetadata) { _, video ->
+                        VideoItem(video)
+                    }
                 }
             }
         }

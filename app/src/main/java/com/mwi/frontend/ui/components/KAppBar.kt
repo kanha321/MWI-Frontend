@@ -9,7 +9,7 @@ import cafe.adriel.voyager.navigator.currentOrThrow
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun Toolbar(
+fun KAppBar(
     title: String = "MWI",
     showSettingsIcon: Boolean = true,
 ) {

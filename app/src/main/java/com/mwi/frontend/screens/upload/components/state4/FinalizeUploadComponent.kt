@@ -45,6 +45,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.model.screenModelScope
+import cafe.adriel.voyager.navigator.LocalNavigator
+import cafe.adriel.voyager.navigator.currentOrThrow
 import com.mwi.frontend.entity.DashBuildResult
 import com.mwi.frontend.screens.upload.UploadScreenModel
 import kotlinx.coroutines.delay
@@ -56,8 +58,11 @@ import kotlin.math.roundToInt
 fun FinalizeUploadComponent(
     screenModel: UploadScreenModel,
     dashBuildResult: DashBuildResult,
+    onDone: () -> Unit = {}
 ) {
     val context = LocalContext.current
+    val navigator = LocalNavigator.currentOrThrow
+
 
     // Trigger upload once per outputDir
     val sessionKey =
@@ -67,7 +72,9 @@ fun FinalizeUploadComponent(
         if (!started) {
             started = true
             screenModel.screenModelScope.launch {
-                screenModel.uploadDashVideo(context, dashBuildResult)
+                screenModel.uploadDashVideo(context, dashBuildResult) {
+                    onDone()
+                }
             }
         }
     }
@@ -102,7 +109,7 @@ fun FinalizeUploadComponent(
     val elapsedText = screenModel.formatTime(elapsedSeconds)
 
     val statusText = when {
-        targetFraction >= 0.999f -> "Finalized"
+        targetFraction >= 0.999f -> "Done ✔"
         screenModel.isUploading -> "Uploading"
         else -> "Preparing to upload"
     }
@@ -252,6 +259,7 @@ fun FinalizeUploadComponent(
                                 Text(
                                     modifier = Modifier.fillMaxWidth(),
                                     textAlign = TextAlign.End,
+                                    fontWeight = FontWeight.SemiBold,
                                     text = sizeText,
                                     style = MaterialTheme.typography.bodyMedium,
                                     color = MaterialTheme.colorScheme.onPrimaryContainer

@@ -6,6 +6,7 @@ import android.content.Context
 import android.net.Uri
 import android.provider.OpenableColumns
 import android.provider.Settings
+import android.widget.Toast
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableLongStateOf
@@ -48,6 +49,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import java.io.IOException
 import java.util.Locale
 import java.util.concurrent.CancellationException
+import kotlin.math.min
 
 class UploadScreenModel(val fileUri: String) : ScreenModel {
 
@@ -263,6 +265,9 @@ class UploadScreenModel(val fileUri: String) : ScreenModel {
      * Screen 2: Preview and Thumbnail Extraction
      */
 
+    var videoDuration by mutableLongStateOf(0L) // Duration in milliseconds
+        private set
+
 
     suspend fun extractFrameWithFfmpeg(
         context: Context,
@@ -272,7 +277,13 @@ class UploadScreenModel(val fileUri: String) : ScreenModel {
         try {
             val outDir = uploadCacheDir(context)
             val outputFile = File(outDir, "extracted_frame_${timeInMillis}.png")
-            val ts = formatMsForFfmpeg(timeInMillis)
+            val ts = formatMsForFfmpeg(min(timeInMillis, videoDuration - 100))
+//            Toast.makeText(
+//                context,
+//                "Extracting at $timeInMillis",
+//                Toast.LENGTH_SHORT
+//            ).show()
+            println("timeInMillis: $timeInMillis, formatted: $ts, total duration: $videoDuration")
 
             // Build FFmpeg command: seek -> read -> grab one frame -> save as PNG
             val cmd = listOf(
@@ -288,8 +299,10 @@ class UploadScreenModel(val fileUri: String) : ScreenModel {
 
             val session = FFmpegKit.execute(cmd)
             if (ReturnCode.isSuccess(session.returnCode)) {
+                println("thumbnail output path: ${outputFile.absolutePath}")
                 outputFile.absolutePath
             } else {
+                println("thumbnail output path: ${outputFile.absolutePath}")
                 null
             }
         } catch (e: Exception) {
@@ -326,7 +339,7 @@ class UploadScreenModel(val fileUri: String) : ScreenModel {
      * Screen 4: Getting remaining Data and finalize
      */
 
-    suspend fun getVideoDurationMsWithFfmpeg(): Long = withContext(Dispatchers.IO) {
+    private suspend fun getVideoDurationMsWithFfmpeg(): Long = withContext(Dispatchers.IO) {
         val path = cachedVideoPath ?: return@withContext 0L
         runCatching {
             val session = FFprobeKit.getMediaInformation(path)
@@ -334,6 +347,12 @@ class UploadScreenModel(val fileUri: String) : ScreenModel {
             val seconds = info?.duration?.toDoubleOrNull() ?: 0.0
             (seconds * 1000.0).toLong()
         }.getOrDefault(0L)
+    }
+
+    fun setVideoDurationWithFfmpeg () {
+        screenModelScope.launch {
+            videoDuration = getVideoDurationMsWithFfmpeg()
+        }
     }
 
     @SuppressLint("HardwareIds")
@@ -447,7 +466,6 @@ class UploadScreenModel(val fileUri: String) : ScreenModel {
     var dashPhase by mutableStateOf("Idle")
         private set
     var dashProgress by mutableFloatStateOf(0f) // 0.0..1.0
-        private set
     var dashSpeedX by mutableStateOf("0x")
         private set
     var dashElapsedMs by mutableLongStateOf(0L)
@@ -606,8 +624,8 @@ class UploadScreenModel(val fileUri: String) : ScreenModel {
                 { completedSession ->
                     val success = ReturnCode.isSuccess(completedSession.returnCode)
                     screenModelScope.launch(Dispatchers.Main) {
-                        dashPhase = if (success) "Completed" else "Failed"
                         dashProgress = if (success) 1f else dashProgress
+                        dashPhase = if (success) "Completed" else "Failed"
                     }
 
                     if (success) {
@@ -757,7 +775,8 @@ class UploadScreenModel(val fileUri: String) : ScreenModel {
         context: Context,
         dashBuildResult: DashBuildResult,
         apiBase: String = Resources.BASE_URL,
-        batchSize: Int = 25 // keep simple; raise to send more per request or set to Int.MAX_VALUE for one-shot
+        batchSize: Int = 25, // keep simple; raise to send more per request or set to Int.MAX_VALUE for one-shot
+        onDone: () -> Unit = {}
     ): Result<String> = withContext(Dispatchers.IO) {
         try {
             val form = CreateVideoForm(
@@ -877,7 +896,22 @@ class UploadScreenModel(val fileUri: String) : ScreenModel {
             e.printStackTrace()
             Result.failure(e)
         } finally {
-            screenModelScope.launch(Dispatchers.Main) { isUploading = false }
+            screenModelScope.launch(Dispatchers.Main) {
+                isUploading = false
+                onDone()
+            }
+        }
+    }
+
+
+    // delete cache
+    fun clearUploadCache(context: Context) {
+        val cacheDir = uploadCacheDir(context)
+        if (cacheDir.exists()) {
+            cacheDir.deleteRecursively()
+            println("Upload cache cleared: ${cacheDir.absolutePath}")
+        } else {
+            println("Upload cache directory does not exist: ${cacheDir.absolutePath}")
         }
     }
 
