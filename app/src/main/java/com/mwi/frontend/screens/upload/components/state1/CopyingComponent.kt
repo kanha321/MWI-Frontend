@@ -25,6 +25,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.mwi.frontend.screens.upload.UploadScreenModel
 
@@ -44,13 +45,14 @@ fun CopyingComponent(
                 },
                 onFailure = {
                     // Handle failure - show error message
-                }
+                },
             )
         }
     }
-    Box(
+    Column(
         modifier = Modifier.fillMaxSize(),
-        contentAlignment = Alignment.Center
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
         OutlinedCard(
             modifier = Modifier
@@ -144,12 +146,16 @@ fun CopyingComponent(
 
                         InfoRow(
                             label = "Copied:",
-                            value = "${screenModel.formatFileSize(screenModel.copiedBytes)} / ${screenModel.formatFileSize(screenModel.fileSize)}"
+                            value = "${screenModel.formatFileSize(screenModel.copiedBytes)} / ${
+                                screenModel.formatFileSize(
+                                    screenModel.fileSize
+                                )
+                            }"
                         )
 
                         if (screenModel.estimatedTimeRemaining > 0) {
                             InfoRow(
-                                label = "ETA:",
+                                label = "Time Left:",
                                 value = screenModel.formatTime(screenModel.estimatedTimeRemaining)
                             )
                         }
@@ -157,6 +163,10 @@ fun CopyingComponent(
                 }
             }
         }
+        Text(
+            text = "If this part is slow,\nits your device not the MWI app\nIts just copying the video to cache",
+            textAlign = TextAlign.Center
+        )
     }
 }
 

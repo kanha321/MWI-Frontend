@@ -1,134 +1,127 @@
-when i convert the video i get this in logs
 
-2025-08-18 00:19:16.916  5950-6044  ffmpeg-kit              com.mwi.frontend                     I  Input #0, mov,mp4,m4a,3gp,3g2,mj2, from '/data/user/0/com.mwi.frontend/cache/UploadCache/temp_video_1755456478524.mp4':
-2025-08-18 00:19:16.916  5950-6044  ffmpeg-kit              com.mwi.frontend                     I    Metadata:
-2025-08-18 00:19:16.916  5950-6044  ffmpeg-kit              com.mwi.frontend                     I      major_brand     :
-2025-08-18 00:19:16.916  5950-6044  ffmpeg-kit              com.mwi.frontend                     I  mp42
-2025-08-18 00:19:16.916  5950-6044  ffmpeg-kit              com.mwi.frontend                     I
-2025-08-18 00:19:16.917  5950-6044  ffmpeg-kit              com.mwi.frontend                     I      minor_version   :
-2025-08-18 00:19:16.917  5950-6044  ffmpeg-kit              com.mwi.frontend                     I  0
-2025-08-18 00:19:16.917  5950-6044  ffmpeg-kit              com.mwi.frontend                     I
-2025-08-18 00:19:16.917  5950-6044  ffmpeg-kit              com.mwi.frontend                     I      compatible_brands:
-2025-08-18 00:19:16.917  5950-6044  ffmpeg-kit              com.mwi.frontend                     I  mp42isom
-2025-08-18 00:19:16.917  5950-6044  ffmpeg-kit              com.mwi.frontend                     I
-2025-08-18 00:19:16.917  5950-6044  ffmpeg-kit              com.mwi.frontend                     I    Duration:
-2025-08-18 00:19:16.917  5950-6044  ffmpeg-kit              com.mwi.frontend                     I  00:00:38.96
-2025-08-18 00:19:16.917  5950-6044  ffmpeg-kit              com.mwi.frontend                     I  , start:
-2025-08-18 00:19:16.918  5950-6044  ffmpeg-kit              com.mwi.frontend                     I  0.000000
-2025-08-18 00:19:16.918  5950-6044  ffmpeg-kit              com.mwi.frontend                     I  , bitrate:
-2025-08-18 00:19:16.918  5950-6044  ffmpeg-kit              com.mwi.frontend                     I  1485 kb/s
-2025-08-18 00:19:16.918  5950-6044  ffmpeg-kit              com.mwi.frontend                     I
-2025-08-18 00:19:16.918  5950-6044  ffmpeg-kit              com.mwi.frontend                     I    Stream #0:0
-2025-08-18 00:19:16.918  5950-6044  ffmpeg-kit              com.mwi.frontend                     I  [0x1]
-2025-08-18 00:19:16.918  5950-6044  ffmpeg-kit              com.mwi.frontend                     I  (und)
-2025-08-18 00:19:16.918  5950-6044  ffmpeg-kit              com.mwi.frontend                     I  : Video: h264 (avc1 / 0x31637661), yuv420p(tv, bt709, progressive), 848x480, 1421 kb/s
-2025-08-18 00:19:16.918  5950-6044  ffmpeg-kit              com.mwi.frontend                     I  ,
-2025-08-18 00:19:16.919  5950-6044  ffmpeg-kit              com.mwi.frontend                     I  29.33 fps,
-2025-08-18 00:19:16.920  5950-6044  ffmpeg-kit              com.mwi.frontend                     I  30 tbr,
-2025-08-18 00:19:16.920  5950-6044  ffmpeg-kit              com.mwi.frontend                     I  600 tbn
-2025-08-18 00:19:16.920  5950-6044  ffmpeg-kit              com.mwi.frontend                     I   (default)
-2025-08-18 00:19:16.920  5950-6044  ffmpeg-kit              com.mwi.frontend                     I
-2025-08-18 00:19:16.920  5950-6044  ffmpeg-kit              com.mwi.frontend                     I      Metadata:
-2025-08-18 00:19:16.921  5950-6044  ffmpeg-kit              com.mwi.frontend                     I        vendor_id       :
-2025-08-18 00:19:16.921  5950-6044  ffmpeg-kit              com.mwi.frontend                     I  [0][0][0][0]
-2025-08-18 00:19:16.921  5950-6044  ffmpeg-kit              com.mwi.frontend                     I
-2025-08-18 00:19:16.921  5950-6044  ffmpeg-kit              com.mwi.frontend                     I      Side data:
-2025-08-18 00:19:16.922  5950-6044  ffmpeg-kit              com.mwi.frontend                     I
-2025-08-18 00:19:16.922  5950-6044  ffmpeg-kit              com.mwi.frontend                     I  displaymatrix: rotation of -90.00 degrees
-2025-08-18 00:19:16.922  5950-6044  ffmpeg-kit              com.mwi.frontend                     I
-2025-08-18 00:19:16.922  5950-6044  ffmpeg-kit              com.mwi.frontend                     I    Stream #0:1
-2025-08-18 00:19:16.922  5950-6044  ffmpeg-kit              com.mwi.frontend                     I  [0x2]
-2025-08-18 00:19:16.922  5950-6044  ffmpeg-kit              com.mwi.frontend                     I  (und)
-2025-08-18 00:19:16.922  5950-6044  ffmpeg-kit              com.mwi.frontend                     I  : Audio: aac (mp4a / 0x6134706D), 44100 Hz, stereo, fltp, 63 kb/s
-2025-08-18 00:19:16.922  5950-6044  ffmpeg-kit              com.mwi.frontend                     I   (default)
-2025-08-18 00:19:16.923  5950-6044  ffmpeg-kit              com.mwi.frontend                     I
-2025-08-18 00:19:16.923  5950-6044  ffmpeg-kit              com.mwi.frontend                     I      Metadata:
-2025-08-18 00:19:16.923  5950-6044  ffmpeg-kit              com.mwi.frontend                     I        vendor_id       :
-2025-08-18 00:19:16.923  5950-6044  ffmpeg-kit              com.mwi.frontend                     I  [0][0][0][0]
-2025-08-18 00:19:16.923  5950-6044  ffmpeg-kit              com.mwi.frontend                     I
-2025-08-18 00:19:16.923  5950-6044  ffmpeg-kit              com.mwi.frontend                     I  [dash @ 0xb4000077626117d0] Opening '/data/user/0/com.mwi.frontend/cache/UploadCache/dash_temp_video_1755456478524_1755456556894/init_0.m4s' for writing
-2025-08-18 00:19:16.923  5950-6044  ffmpeg-kit              com.mwi.frontend                     I  [dash @ 0xb4000077626117d0] Opening '/data/user/0/com.mwi.frontend/cache/UploadCache/dash_temp_video_1755456478524_1755456556894/init_1.m4s' for writing
-2025-08-18 00:19:16.923  5950-6044  ffmpeg-kit              com.mwi.frontend                     I  Output #0, dash, to '/data/user/0/com.mwi.frontend/cache/UploadCache/dash_temp_video_1755456478524_1755456556894/index.mpd':
-2025-08-18 00:19:16.923  5950-6044  ffmpeg-kit              com.mwi.frontend                     I    Metadata:
-2025-08-18 00:19:16.923  5950-6044  ffmpeg-kit              com.mwi.frontend                     I      major_brand     :
-2025-08-18 00:19:16.923  5950-6044  ffmpeg-kit              com.mwi.frontend                     I  mp42
-2025-08-18 00:19:16.923  5950-6044  ffmpeg-kit              com.mwi.frontend                     I
-2025-08-18 00:19:16.924  5950-6044  ffmpeg-kit              com.mwi.frontend                     I      minor_version   :
-2025-08-18 00:19:16.924  5950-6044  ffmpeg-kit              com.mwi.frontend                     I  0
-2025-08-18 00:19:16.924  5950-6044  ffmpeg-kit              com.mwi.frontend                     I
-2025-08-18 00:19:16.924  5950-6044  ffmpeg-kit              com.mwi.frontend                     I      compatible_brands:
-2025-08-18 00:19:16.924  5950-6044  ffmpeg-kit              com.mwi.frontend                     I  mp42isom
-2025-08-18 00:19:16.924  5950-6044  ffmpeg-kit              com.mwi.frontend                     I
-2025-08-18 00:19:16.924  5950-6044  ffmpeg-kit              com.mwi.frontend                     I      encoder         :
-2025-08-18 00:19:16.924  5950-6044  ffmpeg-kit              com.mwi.frontend                     I  Lavf60.16.100
-2025-08-18 00:19:16.924  5950-6044  ffmpeg-kit              com.mwi.frontend                     I
-2025-08-18 00:19:16.924  5950-6044  ffmpeg-kit              com.mwi.frontend                     I    Stream #0:0
-2025-08-18 00:19:16.924  5950-6044  ffmpeg-kit              com.mwi.frontend                     I  (und)
-2025-08-18 00:19:16.925  5950-6044  ffmpeg-kit              com.mwi.frontend                     I  : Video: h264 (avc1 / 0x31637661), yuv420p(tv, bt709, progressive), 848x480, q=2-31, 1421 kb/s
-2025-08-18 00:19:16.925  5950-6044  ffmpeg-kit              com.mwi.frontend                     I  ,
-2025-08-18 00:19:16.925  5950-6044  ffmpeg-kit              com.mwi.frontend                     I  29.33 fps,
-2025-08-18 00:19:16.925  5950-6044  ffmpeg-kit              com.mwi.frontend                     I  30 tbr,
-2025-08-18 00:19:16.925  5950-6044  ffmpeg-kit              com.mwi.frontend                     I  19200 tbn
-2025-08-18 00:19:16.925  5950-6044  ffmpeg-kit              com.mwi.frontend                     I   (default)
-2025-08-18 00:19:16.925  5950-6044  ffmpeg-kit              com.mwi.frontend                     I
-2025-08-18 00:19:16.925  5950-6044  ffmpeg-kit              com.mwi.frontend                     I      Metadata:
-2025-08-18 00:19:16.925  5950-6044  ffmpeg-kit              com.mwi.frontend                     I        vendor_id       :
-2025-08-18 00:19:16.925  5950-6044  ffmpeg-kit              com.mwi.frontend                     I  [0][0][0][0]
-2025-08-18 00:19:16.925  5950-6044  ffmpeg-kit              com.mwi.frontend                     I
-2025-08-18 00:19:16.925  5950-6044  ffmpeg-kit              com.mwi.frontend                     I      Side data:
-2025-08-18 00:19:16.925  5950-6044  ffmpeg-kit              com.mwi.frontend                     I
-2025-08-18 00:19:16.925  5950-6044  ffmpeg-kit              com.mwi.frontend                     I  displaymatrix: rotation of -90.00 degrees
-2025-08-18 00:19:16.925  5950-6044  ffmpeg-kit              com.mwi.frontend                     I
-2025-08-18 00:19:16.925  5950-6044  ffmpeg-kit              com.mwi.frontend                     I    Stream #0:1
-2025-08-18 00:19:16.926  5950-6044  ffmpeg-kit              com.mwi.frontend                     I  (und)
-2025-08-18 00:19:16.926  5950-6044  ffmpeg-kit              com.mwi.frontend                     I  : Audio: aac (mp4a / 0x6134706D), 44100 Hz, stereo, fltp, 63 kb/s
-2025-08-18 00:19:16.926  5950-6044  ffmpeg-kit              com.mwi.frontend                     I   (default)
-2025-08-18 00:19:16.926  5950-6044  ffmpeg-kit              com.mwi.frontend                     I
-2025-08-18 00:19:16.926  5950-6044  ffmpeg-kit              com.mwi.frontend                     I      Metadata:
-2025-08-18 00:19:16.926  5950-6044  ffmpeg-kit              com.mwi.frontend                     I        vendor_id       :
-2025-08-18 00:19:16.926  5950-6044  ffmpeg-kit              com.mwi.frontend                     I  [0][0][0][0]
-2025-08-18 00:19:16.926  5950-6044  ffmpeg-kit              com.mwi.frontend                     I
-2025-08-18 00:19:16.926  5950-6044  ffmpeg-kit              com.mwi.frontend                     I  Stream mapping:
-2025-08-18 00:19:16.926  5950-6044  ffmpeg-kit              com.mwi.frontend                     I    Stream #0:0 -> #0:0
-2025-08-18 00:19:16.927  5950-6044  ffmpeg-kit              com.mwi.frontend                     I   (copy)
-2025-08-18 00:19:16.927  5950-6044  ffmpeg-kit              com.mwi.frontend                     I
-2025-08-18 00:19:16.927  5950-6044  ffmpeg-kit              com.mwi.frontend                     I    Stream #0:1 -> #0:1
-2025-08-18 00:19:16.927  5950-6044  ffmpeg-kit              com.mwi.frontend                     I   (copy)
-2025-08-18 00:19:16.927  5950-6044  ffmpeg-kit              com.mwi.frontend                     I
-2025-08-18 00:19:16.927  5950-6044  ffmpeg-kit              com.mwi.frontend                     I  Press [q] to stop, [?] for help
-2025-08-18 00:19:16.927  5950-6044  ffmpeg-kit              com.mwi.frontend                     I  size=       0kB time=00:00:00.00 bitrate=N/A speed=N/A
-2025-08-18 00:19:16.928  5950-6044  ffmpeg-kit              com.mwi.frontend                     I  [dash @ 0xb4000077626117d0] Opening '/data/user/0/com.mwi.frontend/cache/UploadCache/dash_temp_video_1755456478524_1755456556894/chunk_0_00001.m4s.tmp' for writing
-2025-08-18 00:19:16.928  5950-6044  ffmpeg-kit              com.mwi.frontend                     I  [dash @ 0xb4000077626117d0] Opening '/data/user/0/com.mwi.frontend/cache/UploadCache/dash_temp_video_1755456478524_1755456556894/chunk_1_00001.m4s.tmp' for writing
-2025-08-18 00:19:16.928  5950-6044  ffmpeg-kit              com.mwi.frontend                     I  [dash @ 0xb4000077626117d0] Opening '/data/user/0/com.mwi.frontend/cache/UploadCache/dash_temp_video_1755456478524_1755456556894/index.mpd.tmp' for writing
-2025-08-18 00:19:16.928  5950-6044  ffmpeg-kit              com.mwi.frontend                     I  [dash @ 0xb4000077626117d0] Opening '/data/user/0/com.mwi.frontend/cache/UploadCache/dash_temp_video_1755456478524_1755456556894/chunk_0_00002.m4s.tmp' for writing
-2025-08-18 00:19:16.928  5950-6044  ffmpeg-kit              com.mwi.frontend                     I  [dash @ 0xb4000077626117d0] Opening '/data/user/0/com.mwi.frontend/cache/UploadCache/dash_temp_video_1755456478524_1755456556894/chunk_1_00002.m4s.tmp' for writing
-2025-08-18 00:19:16.933  5950-6044  ffmpeg-kit              com.mwi.frontend                     I  [dash @ 0xb4000077626117d0] Opening '/data/user/0/com.mwi.frontend/cache/UploadCache/dash_temp_video_1755456478524_1755456556894/index.mpd.tmp' for writing
-2025-08-18 00:19:16.933  5950-6044  ffmpeg-kit              com.mwi.frontend                     I  [dash @ 0xb4000077626117d0] Opening '/data/user/0/com.mwi.frontend/cache/UploadCache/dash_temp_video_1755456478524_1755456556894/chunk_0_00003.m4s.tmp' for writing
-2025-08-18 00:19:16.933  5950-6044  ffmpeg-kit              com.mwi.frontend                     I  [dash @ 0xb4000077626117d0] Opening '/data/user/0/com.mwi.frontend/cache/UploadCache/dash_temp_video_1755456478524_1755456556894/chunk_1_00003.m4s.tmp' for writing
-2025-08-18 00:19:16.938  5950-6044  ffmpeg-kit              com.mwi.frontend                     I  [dash @ 0xb4000077626117d0] Opening '/data/user/0/com.mwi.frontend/cache/UploadCache/dash_temp_video_1755456478524_1755456556894/index.mpd.tmp' for writing
-2025-08-18 00:19:16.938  5950-6044  ffmpeg-kit              com.mwi.frontend                     I  [dash @ 0xb4000077626117d0] Opening '/data/user/0/com.mwi.frontend/cache/UploadCache/dash_temp_video_1755456478524_1755456556894/chunk_0_00004.m4s.tmp' for writing
-2025-08-18 00:19:16.938  5950-6044  ffmpeg-kit              com.mwi.frontend                     I  [dash @ 0xb4000077626117d0] Opening '/data/user/0/com.mwi.frontend/cache/UploadCache/dash_temp_video_1755456478524_1755456556894/chunk_1_00004.m4s.tmp' for writing
-2025-08-18 00:19:16.941  5950-6044  ffmpeg-kit              com.mwi.frontend                     I  [dash @ 0xb4000077626117d0] Opening '/data/user/0/com.mwi.frontend/cache/UploadCache/dash_temp_video_1755456478524_1755456556894/index.mpd.tmp' for writing
-2025-08-18 00:19:16.941  5950-6044  ffmpeg-kit              com.mwi.frontend                     I  [dash @ 0xb4000077626117d0] Opening '/data/user/0/com.mwi.frontend/cache/UploadCache/dash_temp_video_1755456478524_1755456556894/chunk_0_00005.m4s.tmp' for writing
-2025-08-18 00:19:16.941  5950-6044  ffmpeg-kit              com.mwi.frontend                     I  [dash @ 0xb4000077626117d0] Opening '/data/user/0/com.mwi.frontend/cache/UploadCache/dash_temp_video_1755456478524_1755456556894/chunk_1_00005.m4s.tmp' for writing
-2025-08-18 00:19:16.945  5950-6044  ffmpeg-kit              com.mwi.frontend                     I  [dash @ 0xb4000077626117d0] Opening '/data/user/0/com.mwi.frontend/cache/UploadCache/dash_temp_video_1755456478524_1755456556894/index.mpd.tmp' for writing
-2025-08-18 00:19:16.945  5950-6044  ffmpeg-kit              com.mwi.frontend                     I  [dash @ 0xb4000077626117d0] Opening '/data/user/0/com.mwi.frontend/cache/UploadCache/dash_temp_video_1755456478524_1755456556894/chunk_0_00006.m4s.tmp' for writing
-2025-08-18 00:19:16.946  5950-6044  ffmpeg-kit              com.mwi.frontend                     I  [dash @ 0xb4000077626117d0] Opening '/data/user/0/com.mwi.frontend/cache/UploadCache/dash_temp_video_1755456478524_1755456556894/chunk_1_00006.m4s.tmp' for writing
-2025-08-18 00:19:16.949  5950-6044  ffmpeg-kit              com.mwi.frontend                     I  [dash @ 0xb4000077626117d0] Opening '/data/user/0/com.mwi.frontend/cache/UploadCache/dash_temp_video_1755456478524_1755456556894/index.mpd.tmp' for writing
-2025-08-18 00:19:16.949  5950-6044  ffmpeg-kit              com.mwi.frontend                     I  [dash @ 0xb4000077626117d0] Opening '/data/user/0/com.mwi.frontend/cache/UploadCache/dash_temp_video_1755456478524_1755456556894/chunk_0_00007.m4s.tmp' for writing
-2025-08-18 00:19:16.950  5950-6044  ffmpeg-kit              com.mwi.frontend                     I  [dash @ 0xb4000077626117d0] Opening '/data/user/0/com.mwi.frontend/cache/UploadCache/dash_temp_video_1755456478524_1755456556894/chunk_1_00007.m4s.tmp' for writing
-2025-08-18 00:19:16.954  5950-6044  ffmpeg-kit              com.mwi.frontend                     I  [dash @ 0xb4000077626117d0] Opening '/data/user/0/com.mwi.frontend/cache/UploadCache/dash_temp_video_1755456478524_1755456556894/index.mpd.tmp' for writing
-2025-08-18 00:19:16.955  5950-6044  ffmpeg-kit              com.mwi.frontend                     I  [dash @ 0xb4000077626117d0] Opening '/data/user/0/com.mwi.frontend/cache/UploadCache/dash_temp_video_1755456478524_1755456556894/chunk_0_00008.m4s.tmp' for writing
-2025-08-18 00:19:16.955  5950-6044  ffmpeg-kit              com.mwi.frontend                     I  [dash @ 0xb4000077626117d0] Opening '/data/user/0/com.mwi.frontend/cache/UploadCache/dash_temp_video_1755456478524_1755456556894/chunk_1_00008.m4s.tmp' for writing
-2025-08-18 00:19:16.959  5950-6044  ffmpeg-kit              com.mwi.frontend                     I  [dash @ 0xb4000077626117d0] Opening '/data/user/0/com.mwi.frontend/cache/UploadCache/dash_temp_video_1755456478524_1755456556894/index.mpd.tmp' for writing
-2025-08-18 00:19:16.959  5950-6044  ffmpeg-kit              com.mwi.frontend                     I  [dash @ 0xb4000077626117d0] Opening '/data/user/0/com.mwi.frontend/cache/UploadCache/dash_temp_video_1755456478524_1755456556894/chunk_0_00009.m4s.tmp' for writing
-2025-08-18 00:19:16.959  5950-6044  ffmpeg-kit              com.mwi.frontend                     I  [dash @ 0xb4000077626117d0] Opening '/data/user/0/com.mwi.frontend/cache/UploadCache/dash_temp_video_1755456478524_1755456556894/chunk_1_00009.m4s.tmp' for writing
-2025-08-18 00:19:16.964  5950-6044  ffmpeg-kit              com.mwi.frontend                     I  [dash @ 0xb4000077626117d0] Opening '/data/user/0/com.mwi.frontend/cache/UploadCache/dash_temp_video_1755456478524_1755456556894/index.mpd.tmp' for writing
-2025-08-18 00:19:16.964  5950-6044  ffmpeg-kit              com.mwi.frontend                     I  [dash @ 0xb4000077626117d0] Opening '/data/user/0/com.mwi.frontend/cache/UploadCache/dash_temp_video_1755456478524_1755456556894/chunk_0_00010.m4s.tmp' for writing
-2025-08-18 00:19:16.964  5950-6044  ffmpeg-kit              com.mwi.frontend                     I  [dash @ 0xb4000077626117d0] Opening '/data/user/0/com.mwi.frontend/cache/UploadCache/dash_temp_video_1755456478524_1755456556894/chunk_1_00010.m4s.tmp' for writing
-2025-08-18 00:19:16.966  5950-6044  ffmpeg-kit              com.mwi.frontend                     I  [dash @ 0xb4000077626117d0] Opening '/data/user/0/com.mwi.frontend/cache/UploadCache/dash_temp_video_1755456478524_1755456556894/index.mpd.tmp' for writing
-2025-08-18 00:19:16.966  5950-6044  ffmpeg-kit              com.mwi.frontend                     I  [out#0/dash @ 0xb400007712641b10] video:6751kB audio:302kB subtitle:0kB other streams:0kB global headers:0kB muxing overhead: unknown
-2025-08-18 00:19:16.967  5950-6044  ffmpeg-kit              com.mwi.frontend                     I  size=N/A time=00:00:38.93 bitrate=N/A speed= 774x
-
-
-i want to show these details in an amazing ui to show the progress of conversion in uploadingComponent
+2025-08-21 11:09:29.178 17029-17080 System.out              com.mwi.frontend                     I  REQUEST: http://10.203.216.235:8080/api/videos/create
+2025-08-21 11:09:29.178 17029-17080 System.out              com.mwi.frontend                     I  METHOD: POST
+2025-08-21 11:09:29.178 17029-17080 System.out              com.mwi.frontend                     I  COMMON HEADERS
+2025-08-21 11:09:29.178 17029-17080 System.out              com.mwi.frontend                     I  -> Accept: application/json
+2025-08-21 11:09:29.178 17029-17080 System.out              com.mwi.frontend                     I  -> Accept-Charset: UTF-8
+2025-08-21 11:09:29.178 17029-17080 System.out              com.mwi.frontend                     I  CONTENT HEADERS
+2025-08-21 11:09:29.178 17029-17080 System.out              com.mwi.frontend                     I  -> Content-Type: multipart/form-data; boundary=-78f99ce34ca5932c-57737b81373b7aae-37f314ee-3f93b03c16f7eac94021f3c0-3
+2025-08-21 11:09:29.247 17029-17084 System.out              com.mwi.frontend                     I  RESPONSE: 400 
+2025-08-21 11:09:29.247 17029-17084 System.out              com.mwi.frontend                     I  METHOD: POST
+2025-08-21 11:09:29.247 17029-17084 System.out              com.mwi.frontend                     I  FROM: http://10.203.216.235:8080/api/videos/create
+2025-08-21 11:09:29.247 17029-17084 System.out              com.mwi.frontend                     I  COMMON HEADERS
+2025-08-21 11:09:29.247 17029-17084 System.out              com.mwi.frontend                     I  -> connection: close
+2025-08-21 11:09:29.247 17029-17084 System.out              com.mwi.frontend                     I  -> content-type: application/json
+2025-08-21 11:09:29.247 17029-17084 System.out              com.mwi.frontend                     I  -> date: Thu, 21 Aug 2025 05:39:29 GMT
+2025-08-21 11:09:29.247 17029-17084 System.out              com.mwi.frontend                     I  -> transfer-encoding: chunked
+2025-08-21 11:09:29.247 17029-17084 System.out              com.mwi.frontend                     I  -> vary: Origin; Access-Control-Request-Method; Access-Control-Request-Headers
+2025-08-21 11:09:29.250 17029-17084 System.out              com.mwi.frontend                     I  [Upload] Create: success (videoId={"timestamp":"2025-08-21T05:39:29.745+00:00","status":400,"error":"Bad Request","path":"/api/videos/create"})
+2025-08-21 11:09:29.250 17029-17084 System.out              com.mwi.frontend                     I  [Upload] Progress: 1028416/6059177 bytes • 16% • speed=12.39 MB/s • eta=0s
+2025-08-21 11:09:29.250 17029-17084 System.out              com.mwi.frontend                     I  [Upload] Segments: totalFiles=17, batches=4
+2025-08-21 11:09:29.250 17029-17084 System.out              com.mwi.frontend                     I  [Upload] Batch 1/4: start • batchBytes=1018433
+2025-08-21 11:09:29.257 17029-17084 System.out              com.mwi.frontend                     I  REQUEST: http://10.203.216.235:8080/api/videos/{"timestamp":"2025-08-21T05:39:29.745+00:00","status":400,"error":"Bad Request","path":"/api/videos/create"}/segments
+2025-08-21 11:09:29.257 17029-17084 System.out              com.mwi.frontend                     I  METHOD: POST
+2025-08-21 11:09:29.257 17029-17084 System.out              com.mwi.frontend                     I  COMMON HEADERS
+2025-08-21 11:09:29.257 17029-17084 System.out              com.mwi.frontend                     I  -> Accept: application/json
+2025-08-21 11:09:29.257 17029-17084 System.out              com.mwi.frontend                     I  -> Accept-Charset: UTF-8
+2025-08-21 11:09:29.257 17029-17084 System.out              com.mwi.frontend                     I  CONTENT HEADERS
+2025-08-21 11:09:29.257 17029-17084 System.out              com.mwi.frontend                     I  -> Content-Type: multipart/form-data; boundary=230a566d66db24de45379096-553bee9ccacd620-6bf483a2-1efae49b56d253ac7686
+2025-08-21 11:09:29.336 17029-17029 InsetsController        com.mwi.frontend                     D  hide(ime(), fromIme=false)
+2025-08-21 11:09:29.336 17029-17029 ImeTracker              com.mwi.frontend                     I  com.mwi.frontend:550fd61c: onRequestHide at ORIGIN_CLIENT reason HIDE_SOFT_INPUT_BY_INSETS_API fromUser false
+2025-08-21 11:09:29.337 17029-17029 ImeTracker              com.mwi.frontend                     I  com.mwi.frontend:550fd61c: onCancelled at PHASE_CLIENT_ALREADY_HIDDEN
+2025-08-21 11:09:29.349 17029-17338 System.out              com.mwi.frontend                     I  RESPONSE: 404 
+2025-08-21 11:09:29.349 17029-17338 System.out              com.mwi.frontend                     I  METHOD: POST
+2025-08-21 11:09:29.349 17029-17338 System.out              com.mwi.frontend                     I  FROM: http://10.203.216.235:8080/api/videos/{"timestamp":"2025-08-21T05:39:29.745+00:00","status":400,"error":"Bad Request","path":"/api/videos/create"}/segments
+2025-08-21 11:09:29.349 17029-17338 System.out              com.mwi.frontend                     I  COMMON HEADERS
+2025-08-21 11:09:29.349 17029-17338 System.out              com.mwi.frontend                     I  -> connection: keep-alive
+2025-08-21 11:09:29.349 17029-17338 System.out              com.mwi.frontend                     I  -> content-type: application/json
+2025-08-21 11:09:29.349 17029-17338 System.out              com.mwi.frontend                     I  -> date: Thu, 21 Aug 2025 05:39:29 GMT
+2025-08-21 11:09:29.349 17029-17338 System.out              com.mwi.frontend                     I  -> keep-alive: timeout=60
+2025-08-21 11:09:29.349 17029-17338 System.out              com.mwi.frontend                     I  -> transfer-encoding: chunked
+2025-08-21 11:09:29.349 17029-17338 System.out              com.mwi.frontend                     I  -> vary: Origin; Access-Control-Request-Method; Access-Control-Request-Headers
+2025-08-21 11:09:29.349 17029-17338 System.out              com.mwi.frontend                     I  [Upload] Batch 1/4: success • files=5/17 • batchSpeed=9.81 MB/s
+2025-08-21 11:09:29.350 17029-17338 System.out              com.mwi.frontend                     I  [Upload] Progress: 2046849/6059177 bytes • 33% • speed=10.90 MB/s • eta=0s
+2025-08-21 11:09:29.350 17029-17338 System.out              com.mwi.frontend                     I  [Upload] Batch 2/4: start • batchBytes=1836784
+2025-08-21 11:09:29.356 17029-17338 System.out              com.mwi.frontend                     I  REQUEST: http://10.203.216.235:8080/api/videos/{"timestamp":"2025-08-21T05:39:29.745+00:00","status":400,"error":"Bad Request","path":"/api/videos/create"}/segments
+2025-08-21 11:09:29.356 17029-17338 System.out              com.mwi.frontend                     I  METHOD: POST
+2025-08-21 11:09:29.356 17029-17338 System.out              com.mwi.frontend                     I  COMMON HEADERS
+2025-08-21 11:09:29.356 17029-17338 System.out              com.mwi.frontend                     I  -> Accept: application/json
+2025-08-21 11:09:29.356 17029-17338 System.out              com.mwi.frontend                     I  -> Accept-Charset: UTF-8
+2025-08-21 11:09:29.356 17029-17338 System.out              com.mwi.frontend                     I  CONTENT HEADERS
+2025-08-21 11:09:29.356 17029-17338 System.out              com.mwi.frontend                     I  -> Content-Type: multipart/form-data; boundary=-29463fb66f5bf8d4-4f19acb1-ff1f5102ed778ac3f1d489c18e4222e4f016b6560d3
+2025-08-21 11:09:29.397 17029-17036 om.mwi.frontend         com.mwi.frontend                     I  Compiler allocated 7093KB to compile kotlin.Unit com.mwi.frontend.screens.upload.components.state4.FinalizeUploadComponentKt.FinalizeUploadComponent$lambda$27$lambda$26(java.lang.String, java.lang.String, androidx.compose.runtime.State, java.lang.String, java.lang.String, java.lang.String, java.lang.String, androidx.compose.foundation.layout.ColumnScope, androidx.compose.runtime.Composer, int)
+2025-08-21 11:09:29.606 17029-17197 BufferPoolAccessor2.0   com.mwi.frontend                     D  bufferpool2 0xb400007ad4c628c8 : 0(0 size) total buffers - 0(0 size) used buffers - 56/61 (recycle/alloc) - 5/56 (fetch/transfer)
+2025-08-21 11:09:29.606 17029-17197 BufferPoolAccessor2.0   com.mwi.frontend                     D  bufferpool2 0xb400007ad4c5d0e8 : 0(0 size) total buffers - 0(0 size) used buffers - 73/78 (recycle/alloc) - 6/75 (fetch/transfer)
+2025-08-21 11:09:29.606 17029-17197 BufferPoolAccessor2.0   com.mwi.frontend                     D  evictor expired: 2, evicted: 2
+2025-08-21 11:09:30.106 17029-17338 System.out              com.mwi.frontend                     I  RESPONSE: 404 
+2025-08-21 11:09:30.106 17029-17338 System.out              com.mwi.frontend                     I  METHOD: POST
+2025-08-21 11:09:30.106 17029-17338 System.out              com.mwi.frontend                     I  FROM: http://10.203.216.235:8080/api/videos/{"timestamp":"2025-08-21T05:39:29.745+00:00","status":400,"error":"Bad Request","path":"/api/videos/create"}/segments
+2025-08-21 11:09:30.106 17029-17338 System.out              com.mwi.frontend                     I  COMMON HEADERS
+2025-08-21 11:09:30.106 17029-17338 System.out              com.mwi.frontend                     I  -> connection: keep-alive
+2025-08-21 11:09:30.106 17029-17338 System.out              com.mwi.frontend                     I  -> content-type: application/json
+2025-08-21 11:09:30.106 17029-17338 System.out              com.mwi.frontend                     I  -> date: Thu, 21 Aug 2025 05:39:30 GMT
+2025-08-21 11:09:30.106 17029-17338 System.out              com.mwi.frontend                     I  -> keep-alive: timeout=60
+2025-08-21 11:09:30.106 17029-17338 System.out              com.mwi.frontend                     I  -> transfer-encoding: chunked
+2025-08-21 11:09:30.106 17029-17338 System.out              com.mwi.frontend                     I  -> vary: Origin; Access-Control-Request-Method; Access-Control-Request-Headers
+2025-08-21 11:09:30.107 17029-17338 System.out              com.mwi.frontend                     I  [Upload] Batch 2/4: success • files=10/17 • batchSpeed=2.31 MB/s
+2025-08-21 11:09:30.107 17029-17338 System.out              com.mwi.frontend                     I  [Upload] Progress: 3883633/6059177 bytes • 64% • speed=3.96 MB/s • eta=0s
+2025-08-21 11:09:30.107 17029-17338 System.out              com.mwi.frontend                     I  [Upload] Batch 3/4: start • batchBytes=1499061
+2025-08-21 11:09:30.114 17029-17338 System.out              com.mwi.frontend                     I  REQUEST: http://10.203.216.235:8080/api/videos/{"timestamp":"2025-08-21T05:39:29.745+00:00","status":400,"error":"Bad Request","path":"/api/videos/create"}/segments
+2025-08-21 11:09:30.114 17029-17338 System.out              com.mwi.frontend                     I  METHOD: POST
+2025-08-21 11:09:30.114 17029-17338 System.out              com.mwi.frontend                     I  COMMON HEADERS
+2025-08-21 11:09:30.114 17029-17338 System.out              com.mwi.frontend                     I  -> Accept: application/json
+2025-08-21 11:09:30.114 17029-17338 System.out              com.mwi.frontend                     I  -> Accept-Charset: UTF-8
+2025-08-21 11:09:30.114 17029-17338 System.out              com.mwi.frontend                     I  CONTENT HEADERS
+2025-08-21 11:09:30.114 17029-17338 System.out              com.mwi.frontend                     I  -> Content-Type: multipart/form-data; boundary=5cfec6ecbe3d1ea-6c217cd2405e30bcb65be7e-4d71ff1d-4ed683a1-512e5f35fa84
+2025-08-21 11:09:30.182 17029-17339 System.out              com.mwi.frontend                     I  RESPONSE: 404 
+2025-08-21 11:09:30.182 17029-17339 System.out              com.mwi.frontend                     I  METHOD: POST
+2025-08-21 11:09:30.182 17029-17339 System.out              com.mwi.frontend                     I  FROM: http://10.203.216.235:8080/api/videos/{"timestamp":"2025-08-21T05:39:29.745+00:00","status":400,"error":"Bad Request","path":"/api/videos/create"}/segments
+2025-08-21 11:09:30.182 17029-17339 System.out              com.mwi.frontend                     I  COMMON HEADERS
+2025-08-21 11:09:30.182 17029-17339 System.out              com.mwi.frontend                     I  -> connection: keep-alive
+2025-08-21 11:09:30.182 17029-17339 System.out              com.mwi.frontend                     I  -> content-type: application/json
+2025-08-21 11:09:30.182 17029-17339 System.out              com.mwi.frontend                     I  -> date: Thu, 21 Aug 2025 05:39:30 GMT
+2025-08-21 11:09:30.182 17029-17339 System.out              com.mwi.frontend                     I  -> keep-alive: timeout=60
+2025-08-21 11:09:30.182 17029-17339 System.out              com.mwi.frontend                     I  -> transfer-encoding: chunked
+2025-08-21 11:09:30.182 17029-17339 System.out              com.mwi.frontend                     I  -> vary: Origin; Access-Control-Request-Method; Access-Control-Request-Headers
+2025-08-21 11:09:30.183 17029-17339 System.out              com.mwi.frontend                     I  [Upload] Batch 3/4: success • files=15/17 • batchSpeed=18.96 MB/s
+2025-08-21 11:09:30.184 17029-17339 System.out              com.mwi.frontend                     I  [Upload] Progress: 5382694/6059177 bytes • 88% • speed=5.07 MB/s • eta=0s
+2025-08-21 11:09:30.184 17029-17339 System.out              com.mwi.frontend                     I  [Upload] Batch 4/4: start • batchBytes=676483
+2025-08-21 11:09:30.188 17029-17339 System.out              com.mwi.frontend                     I  REQUEST: http://10.203.216.235:8080/api/videos/{"timestamp":"2025-08-21T05:39:29.745+00:00","status":400,"error":"Bad Request","path":"/api/videos/create"}/segments
+2025-08-21 11:09:30.188 17029-17339 System.out              com.mwi.frontend                     I  METHOD: POST
+2025-08-21 11:09:30.188 17029-17339 System.out              com.mwi.frontend                     I  COMMON HEADERS
+2025-08-21 11:09:30.188 17029-17339 System.out              com.mwi.frontend                     I  -> Accept: application/json
+2025-08-21 11:09:30.188 17029-17339 System.out              com.mwi.frontend                     I  -> Accept-Charset: UTF-8
+2025-08-21 11:09:30.188 17029-17339 System.out              com.mwi.frontend                     I  CONTENT HEADERS
+2025-08-21 11:09:30.189 17029-17339 System.out              com.mwi.frontend                     I  -> Content-Type: multipart/form-data; boundary=-501cdf8f44ff87717ca622f2-34fdba7-63440ad1-1b9d38-7abe6b4774de80a2-43d
+2025-08-21 11:09:37.491 17029-17339 System.out              com.mwi.frontend                     I  RESPONSE: 404 
+2025-08-21 11:09:37.491 17029-17339 System.out              com.mwi.frontend                     I  METHOD: POST
+2025-08-21 11:09:37.491 17029-17339 System.out              com.mwi.frontend                     I  FROM: http://10.203.216.235:8080/api/videos/{"timestamp":"2025-08-21T05:39:29.745+00:00","status":400,"error":"Bad Request","path":"/api/videos/create"}/segments
+2025-08-21 11:09:37.491 17029-17339 System.out              com.mwi.frontend                     I  COMMON HEADERS
+2025-08-21 11:09:37.491 17029-17339 System.out              com.mwi.frontend                     I  -> connection: keep-alive
+2025-08-21 11:09:37.491 17029-17339 System.out              com.mwi.frontend                     I  -> content-type: application/json
+2025-08-21 11:09:37.491 17029-17339 System.out              com.mwi.frontend                     I  -> date: Thu, 21 Aug 2025 05:39:37 GMT
+2025-08-21 11:09:37.491 17029-17339 System.out              com.mwi.frontend                     I  -> keep-alive: timeout=60
+2025-08-21 11:09:37.491 17029-17339 System.out              com.mwi.frontend                     I  -> transfer-encoding: chunked
+2025-08-21 11:09:37.491 17029-17339 System.out              com.mwi.frontend                     I  -> vary: Origin; Access-Control-Request-Method; Access-Control-Request-Headers
+2025-08-21 11:09:37.493 17029-17339 System.out              com.mwi.frontend                     I  [Upload] Batch 4/4: success • files=17/17 • batchSpeed=90.38 KB/s
+2025-08-21 11:09:37.494 17029-17339 System.out              com.mwi.frontend                     I  [Upload] Progress: 6059177/6059177 bytes • 100% • speed=710.93 KB/s • eta=0s
+2025-08-21 11:09:37.494 17029-17339 System.out              com.mwi.frontend                     I  [Upload] Finalize: start
+2025-08-21 11:09:37.499 17029-17339 System.out              com.mwi.frontend                     I  REQUEST: http://10.203.216.235:8080/api/videos/{"timestamp":"2025-08-21T05:39:29.745+00:00","status":400,"error":"Bad Request","path":"/api/videos/create"}/finalize
+2025-08-21 11:09:37.499 17029-17339 System.out              com.mwi.frontend                     I  METHOD: POST
+2025-08-21 11:09:37.499 17029-17339 System.out              com.mwi.frontend                     I  COMMON HEADERS
+2025-08-21 11:09:37.499 17029-17339 System.out              com.mwi.frontend                     I  -> Accept: application/json
+2025-08-21 11:09:37.499 17029-17339 System.out              com.mwi.frontend                     I  -> Accept-Charset: UTF-8
+2025-08-21 11:09:37.499 17029-17339 System.out              com.mwi.frontend                     I  CONTENT HEADERS
+2025-08-21 11:09:37.500 17029-17339 System.out              com.mwi.frontend                     I  -> Content-Length: 0
+2025-08-21 11:09:37.526 17029-17339 System.out              com.mwi.frontend                     I  RESPONSE: 404 
+2025-08-21 11:09:37.526 17029-17339 System.out              com.mwi.frontend                     I  METHOD: POST
+2025-08-21 11:09:37.526 17029-17339 System.out              com.mwi.frontend                     I  FROM: http://10.203.216.235:8080/api/videos/{"timestamp":"2025-08-21T05:39:29.745+00:00","status":400,"error":"Bad Request","path":"/api/videos/create"}/finalize
+2025-08-21 11:09:37.526 17029-17339 System.out              com.mwi.frontend                     I  COMMON HEADERS
+2025-08-21 11:09:37.526 17029-17339 System.out              com.mwi.frontend                     I  -> connection: keep-alive
+2025-08-21 11:09:37.526 17029-17339 System.out              com.mwi.frontend                     I  -> content-type: application/json
+2025-08-21 11:09:37.526 17029-17339 System.out              com.mwi.frontend                     I  -> date: Thu, 21 Aug 2025 05:39:38 GMT
+2025-08-21 11:09:37.526 17029-17339 System.out              com.mwi.frontend                     I  -> keep-alive: timeout=60
+2025-08-21 11:09:37.526 17029-17339 System.out              com.mwi.frontend                     I  -> transfer-encoding: chunked
+2025-08-21 11:09:37.526 17029-17339 System.out              com.mwi.frontend                     I  -> vary: Origin; Access-Control-Request-Method; Access-Control-Request-Headers
+2025-08-21 11:09:37.528 17029-17339 System.out              com.mwi.frontend                     I  [Upload] Finalize: success
+2025-08-21 11:09:37.528 17029-17339 System.out              com.mwi.frontend                     I  [Upload] Progress: 6059177/6059177 bytes • 100% • speed=708.03 KB/s • eta=0s

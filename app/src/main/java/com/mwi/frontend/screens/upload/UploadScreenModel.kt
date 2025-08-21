@@ -329,6 +329,7 @@ class UploadScreenModel(val fileUri: String) : ScreenModel {
 
     var title by mutableStateOf("")
     var description by mutableStateOf("")
+    var nsfw by mutableStateOf(true)
 
     fun canContinueToUpload(): Boolean {
         return title.isNotBlank() && description.isNotBlank() && cachedVideoPath != null && thumbnailUri != null
@@ -501,23 +502,33 @@ class UploadScreenModel(val fileUri: String) : ScreenModel {
         val timeMatch = timeRegex.find(line)
         val speedMatch = speedRegex.find(line)
 
+        // Numeric speed: prefer current line, else last known from dashSpeedX
+        val speedX = speedMatch?.groupValues?.getOrNull(1)?.toDoubleOrNull()
+            ?: dashSpeedX.removeSuffix("x").trim().toDoubleOrNull()
+
         if (timeMatch != null) {
             val h = timeMatch.groupValues[1].toInt()
             val m = timeMatch.groupValues[2].toInt()
             val sFloat = timeMatch.groupValues[3].toDouble()
             val sec = h * 3600 + m * 60 + sFloat
-            val currentMs = (sec * 1000).toLong()
+            val processedMs = (sec * 1000).toLong() // media time processed
 
-            dashElapsedMs = currentMs.coerceAtLeast(dashElapsedMs)
             dashDurationMs = durationMs
             if (durationMs > 0) {
-                dashProgress = (currentMs.toFloat() / durationMs.toFloat()).coerceIn(0f, 1f)
-                val remainingMs = (durationMs - currentMs).coerceAtLeast(0)
-                // If speed is known, scale ETA down; else a naive remaining
-                val speedX = speedMatch?.groupValues?.getOrNull(1)?.toDoubleOrNull()
-                dashEtaMs = if (speedX != null && speedX > 0.01) {
-                    (remainingMs / speedX).toLong()
-                } else remainingMs
+                dashProgress = (processedMs.toFloat() / durationMs.toFloat()).coerceIn(0f, 1f)
+
+                // Wall-clock elapsed and ETA using speed
+                if (speedX != null && speedX > 0.0) {
+                    val elapsedWallMs = (processedMs / speedX).toLong()
+                    dashElapsedMs = elapsedWallMs.coerceAtLeast(dashElapsedMs)
+
+                    val remainingMediaMs = (durationMs - processedMs).coerceAtLeast(0)
+                    dashEtaMs = (remainingMediaMs / speedX).toLong()
+                } else {
+                    // Fallback: naive (treat media time as wall time)
+                    dashElapsedMs = processedMs.coerceAtLeast(dashElapsedMs)
+                    dashEtaMs = (durationMs - processedMs).coerceAtLeast(0)
+                }
             }
         }
 
@@ -528,25 +539,32 @@ class UploadScreenModel(val fileUri: String) : ScreenModel {
 
     // Statistics callback is more reliable than parsing logs for time/size.
     private fun onStatistics(stats: Statistics, durationMs: Long) {
-        val t = stats.time.toLong() // ms
-        if (t >= lastStatTimeMs) {
-            lastStatTimeMs = t
-            dashElapsedMs = t
+        val processedMs = stats.time.toLong() // media time processed (ms)
+        if (processedMs >= lastStatTimeMs) {
+            lastStatTimeMs = processedMs
             dashDurationMs = durationMs
+
+            val speedNum = stats.speed
+
             if (durationMs > 0) {
-                dashProgress = (t.toFloat() / durationMs.toFloat()).coerceIn(0f, 1f)
-                // If we have speed in stats (not always available), prefer it
-                val speed = stats.speed
-                dashSpeedX =
-                    if (speed != null && speed > 0) String.format("%.2fx", speed) else dashSpeedX
-                val remainingMs = (durationMs - t).coerceAtLeast(0)
-                dashEtaMs = if (stats.speed != null && stats.speed > 0.01) {
-                    (remainingMs / stats.speed).toLong()
-                } else remainingMs
+                dashProgress = (processedMs.toFloat() / durationMs.toFloat()).coerceIn(0f, 1f)
+
+                if (speedNum > 0.0) {
+                    val elapsedWallMs = (processedMs / speedNum).toLong()
+                    dashElapsedMs = elapsedWallMs.coerceAtLeast(dashElapsedMs)
+
+                    val remainingMediaMs = (durationMs - processedMs).coerceAtLeast(0)
+                    dashEtaMs = (remainingMediaMs / speedNum).toLong()
+
+                    dashSpeedX = String.format(Locale.US, "%.2fx", speedNum)
+                } else {
+                    // Fallback if speed is unavailable
+                    dashElapsedMs = processedMs.coerceAtLeast(dashElapsedMs)
+                    dashEtaMs = (durationMs - processedMs).coerceAtLeast(0)
+                }
             }
         }
     }
-
     // Public API to start building DASH with live progress suitable for UI.
     suspend fun buildDashFromCacheWithUi(
         context: Context,
@@ -609,9 +627,9 @@ class UploadScreenModel(val fileUri: String) : ScreenModel {
             "-use_timeline",
             "1",
             "-init_seg_name",
-            "init_${'$'}RepresentationID${'$'}.${'$'}ext${'$'}",
+            "init_${'$'}RepresentationID$.${'$'}ext$",
             "-media_seg_name",
-            "chunk_${'$'}RepresentationID${'$'}_${'$'}Number%05d${'$'}.${'$'}ext${'$'}",
+            "chunk_${'$'}RepresentationID${'$'}_${'$'}Number%05d$.${'$'}ext$",
             manifestFile.absolutePath
         ).joinToString(" ")
 
@@ -704,7 +722,10 @@ class UploadScreenModel(val fileUri: String) : ScreenModel {
     }
 
     // Optional helpers for UI rendering
-    fun dashElapsedText(): String = formatTime((dashElapsedMs / 1000).coerceAtLeast(0))
+    fun dashElapsedText(): String {
+        val seconds = (dashElapsedMs.coerceAtLeast(0)) / 1000.0
+        return String.format(Locale.US, "%.2f s", seconds)
+    }
     fun dashEtaText(): String = formatTime((dashEtaMs / 1000).coerceAtLeast(0))
     // --- END LIVE DASH STATE ---
 
@@ -770,12 +791,11 @@ class UploadScreenModel(val fileUri: String) : ScreenModel {
     }
 
     // 2) Replace your uploadDashVideo with this version (logic unchanged, telemetry added)
-// Kotlin
     suspend fun uploadDashVideo(
         context: Context,
         dashBuildResult: DashBuildResult,
         apiBase: String = Resources.BASE_URL,
-        batchSize: Int = 25, // keep simple; raise to send more per request or set to Int.MAX_VALUE for one-shot
+        batchSize: Int = 5,
         onDone: () -> Unit = {}
     ): Result<String> = withContext(Dispatchers.IO) {
         try {
@@ -783,6 +803,7 @@ class UploadScreenModel(val fileUri: String) : ScreenModel {
                 uId = getDeviceId(context),
                 title = title,
                 description = description,
+                nsfw = nsfw,
                 duration = dashBuildResult.durationMs,
                 manifest = dashBuildResult.manifest,
                 thumbnail = dashBuildResult.thumbnail
@@ -793,7 +814,6 @@ class UploadScreenModel(val fileUri: String) : ScreenModel {
             var uploadedBytes = 0L
             val startedNs = System.nanoTime()
 
-            // Init telemetry for future UI
             screenModelScope.launch(Dispatchers.Main) {
                 isUploading = true
                 uploadTotalBytes = totalBytes
@@ -803,7 +823,7 @@ class UploadScreenModel(val fileUri: String) : ScreenModel {
                 uploadEtaSeconds = 0L
             }
 
-            // Step 1: Create (stream manifest + thumbnail)
+            // Add nsfw in the create multipart
             println("[Upload] Create: start")
             val videoId = httpClient.post("$apiBase/api/videos/create") {
                 setBody(
@@ -812,25 +832,30 @@ class UploadScreenModel(val fileUri: String) : ScreenModel {
                             append("uId", form.uId)
                             append("title", form.title)
                             append("description", form.description)
+                            append("nsfw", form.nsfw.toString()) // <-- send nsfw as true/false
                             append("duration", form.duration.toString())
 
-                            // Stream playlist (.mpd)
                             append(
                                 "playlist",
                                 InputProvider { form.manifest.inputStream().asInput() },
                                 Headers.build {
                                     append(HttpHeaders.ContentType, "application/dash+xml")
-                                    append(HttpHeaders.ContentDisposition, "filename=\"${form.manifest.name}\"")
+                                    append(
+                                        HttpHeaders.ContentDisposition,
+                                        "filename=\"${form.manifest.name}\""
+                                    )
                                 }
                             )
 
-                            // Stream thumbnail (generic type)
                             append(
                                 "thumbnail",
                                 InputProvider { form.thumbnail.inputStream().asInput() },
                                 Headers.build {
                                     append(HttpHeaders.ContentType, ContentType.Application.OctetStream.toString())
-                                    append(HttpHeaders.ContentDisposition, "filename=\"${form.thumbnail.name}\"")
+                                    append(
+                                        HttpHeaders.ContentDisposition,
+                                        "filename=\"${form.thumbnail.name}\""
+                                    )
                                 }
                             )
                         }
@@ -844,7 +869,6 @@ class UploadScreenModel(val fileUri: String) : ScreenModel {
 
             if (videoId.isBlank()) return@withContext Result.failure(IllegalStateException("Empty videoId"))
 
-            // Step 2: Upload segments (streamed, simple fixed batch size)
             val batches = if (batchSize <= 0) listOf(segments) else segments.chunked(batchSize)
             val totalFiles = segments.size
             var uploadedFiles = 0
@@ -862,10 +886,13 @@ class UploadScreenModel(val fileUri: String) : ScreenModel {
                                 batch.forEach { seg ->
                                     append(
                                         "files",
-                                        InputProvider { seg.inputStream().asInput() }, // stream segment
+                                        InputProvider { seg.inputStream().asInput() },
                                         Headers.build {
                                             append(HttpHeaders.ContentType, ContentType.Application.OctetStream.toString())
-                                            append(HttpHeaders.ContentDisposition, "filename=\"${seg.name}\"")
+                                            append(
+                                                HttpHeaders.ContentDisposition,
+                                                "filename=\"${seg.name}\""
+                                            )
                                         }
                                     )
                                 }
@@ -884,7 +911,6 @@ class UploadScreenModel(val fileUri: String) : ScreenModel {
                 updateUploadTelemetry(totalBytes, uploadedBytes, startedNs)
             }
 
-            // Step 3: Finalize
             println("[Upload] Finalize: start")
             httpClient.post("$apiBase/api/videos/$videoId/finalize")
             println("[Upload] Finalize: success")
@@ -903,7 +929,6 @@ class UploadScreenModel(val fileUri: String) : ScreenModel {
         }
     }
 
-
     // delete cache
     fun clearUploadCache(context: Context) {
         val cacheDir = uploadCacheDir(context)
@@ -920,6 +945,7 @@ class UploadScreenModel(val fileUri: String) : ScreenModel {
             uId = getDeviceId(context),
             title = title,
             description = description,
+            nsfw = nsfw,
             duration = dashBuildResult.durationMs,
             manifest = dashBuildResult.manifest,
             thumbnail = dashBuildResult.thumbnail,

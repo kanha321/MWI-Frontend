@@ -1,6 +1,7 @@
 package com.mwi.frontend.screens.upload.components
 
 import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.SizeTransform
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.tween
@@ -25,6 +26,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.mwi.frontend.screens.upload.UploadScreenModel
+import com.mwi.frontend.screens.upload.UploadScreenModel.UploadStep
 import com.mwi.frontend.screens.upload.components.state1.CopyingComponent
 import com.mwi.frontend.screens.upload.components.state2.PreviewComponent
 import com.mwi.frontend.screens.upload.components.state3.InfoComponent
@@ -81,50 +83,53 @@ fun UploadComponent(screenModel: UploadScreenModel) {
                         .verticalScroll(rememberScrollState())
                 ) {
                     when (currentStep) {
-                        is UploadScreenModel.UploadStep.Copying -> {
+                        is UploadStep.Copying -> {
                             CopyingComponent(
                                 screenModel = screenModel,
                                 onCopyCompleted = { screenModel.nextStep() }
                             )
                         }
-                        is UploadScreenModel.UploadStep.Preview -> {
+
+                        is UploadStep.Preview -> {
                             PreviewComponent(screenModel = screenModel)
                         }
-                        is UploadScreenModel.UploadStep.Details -> {
+
+                        is UploadStep.Details -> {
                             InfoComponent(screenModel = screenModel)
                         }
-                        is UploadScreenModel.UploadStep.Uploading -> {
+
+                        is UploadStep.Uploading -> {
                             UploadingComponent(screenModel = screenModel)
                         }
-                        // If your model still has Completed, treat it as a status screen.
-                        is UploadScreenModel.UploadStep.Completed -> {
-                            StatusHeader(
-                                title = "Completed",
-                                subtitle = "Upload finished"
-                            )
-                        }
+
+                        else -> Unit // Ignore any extra states (e.g., Completed) not used here
                     }
                 }
             }
 
-            NavigationButtons(
-                currentStep = screenModel.currentStep,
-                onPrevious = { screenModel.previousStep() },
-                onNext = { screenModel.nextStep() },
-                canProceed = canProceedToNextStep(screenModel),
-                modifier = Modifier.padding(16.dp)
-            )
+            AnimatedVisibility(
+                visible = screenModel.currentStep != UploadStep.Copying &&
+                        screenModel.currentStep != UploadStep.Uploading
+            ) {
+                NavigationButtons(
+                    currentStep = screenModel.currentStep,
+                    onPrevious = { screenModel.previousStep() },
+                    onNext = { screenModel.nextStep() },
+                    canProceed = canProceedToNextStep(screenModel),
+                    modifier = Modifier.padding(16.dp)
+                )
+            }
         }
     }
 }
 
-// Used only for animation direction, keep full ordering if Completed exists.
+// Only four steps for animation ordering; fallback groups any extra state at the end.
 private fun stepIndex(step: UploadScreenModel.UploadStep): Int = when (step) {
     is UploadScreenModel.UploadStep.Copying -> 0
     is UploadScreenModel.UploadStep.Preview -> 1
     is UploadScreenModel.UploadStep.Details -> 2
     is UploadScreenModel.UploadStep.Uploading -> 3
-    is UploadScreenModel.UploadStep.Completed -> 4
+    else -> 3
 }
 
 @Composable
@@ -141,6 +146,7 @@ private fun StepOrStatusHeader(
                 modifier = modifier
             )
         }
+
         is UploadScreenModel.UploadStep.Details -> {
             InputStepHeader(
                 currentIndex = 2,
@@ -149,6 +155,7 @@ private fun StepOrStatusHeader(
                 modifier = modifier
             )
         }
+
         is UploadScreenModel.UploadStep.Copying -> {
             StatusHeader(
                 title = "Preparing video",
@@ -156,6 +163,7 @@ private fun StepOrStatusHeader(
                 modifier = modifier
             )
         }
+
         is UploadScreenModel.UploadStep.Uploading -> {
             StatusHeader(
                 title = "Uploading",
@@ -163,13 +171,8 @@ private fun StepOrStatusHeader(
                 modifier = modifier
             )
         }
-        is UploadScreenModel.UploadStep.Completed -> {
-            StatusHeader(
-                title = "Completed",
-                subtitle = "Upload finished",
-                modifier = modifier
-            )
-        }
+
+        else -> Unit
     }
 }
 
@@ -230,8 +233,9 @@ private fun NavigationButtons(
         OutlinedButton(
             onClick = onPrevious,
             modifier = Modifier.weight(1f),
-            enabled = currentStep !is UploadScreenModel.UploadStep.Copying
-                    && currentStep !is UploadScreenModel.UploadStep.Uploading
+            enabled = currentStep !is UploadScreenModel.UploadStep.Copying &&
+                    currentStep !is UploadScreenModel.UploadStep.Uploading &&
+                    currentStep !is UploadScreenModel.UploadStep.Preview
         ) {
             Text("Previous")
         }
@@ -259,6 +263,6 @@ private fun canProceedToNextStep(screenModel: UploadScreenModel): Boolean {
         is UploadScreenModel.UploadStep.Preview -> screenModel.thumbnailUri != null
         is UploadScreenModel.UploadStep.Details -> screenModel.canContinueToUpload()
         is UploadScreenModel.UploadStep.Uploading -> false
-        is UploadScreenModel.UploadStep.Completed -> false
+        else -> false
     }
 }

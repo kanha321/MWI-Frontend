@@ -1,5 +1,6 @@
 package com.mwi.frontend.screens.home
 
+import android.content.Context
 import cafe.adriel.voyager.core.model.ScreenModel
 import com.kanhaji.basics.networking.httpClient
 import com.mwi.frontend.entity.VideoMetadata
@@ -11,9 +12,11 @@ import io.ktor.client.statement.bodyAsText
 import io.ktor.http.ContentType
 import io.ktor.http.HttpHeaders
 import io.ktor.http.contentType
+import java.io.File
 
 class HomeScreenModel : ScreenModel {
-    suspend fun getAllVideos() : List<VideoMetadata> {
+
+    suspend fun getAllVideos(): List<VideoMetadata> {
         val response = httpClient.get("${Resources.BASE_URL}/api/videos") {
             contentType(ContentType.Application.Json)
             header(HttpHeaders.ContentType, ContentType.Application.Json)
@@ -23,4 +26,5 @@ class HomeScreenModel : ScreenModel {
 
         return videos
     }
+
 }

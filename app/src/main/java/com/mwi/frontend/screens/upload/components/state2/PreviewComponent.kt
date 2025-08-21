@@ -55,7 +55,6 @@ import java.io.File
 fun PreviewComponent(
     screenModel: UploadScreenModel,
 ) {
-
     val previewUri: String = screenModel.cachedVideoPath
         ?.let { Uri.fromFile(File(it)).toString() } // file://...
         ?: screenModel.fileUri                                 // content://...

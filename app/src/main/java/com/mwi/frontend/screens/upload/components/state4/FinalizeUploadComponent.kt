@@ -22,6 +22,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CloudUpload
 import androidx.compose.material.icons.filled.Schedule
 import androidx.compose.material.icons.filled.Timelapse
+import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ElevatedCard
@@ -270,65 +271,30 @@ fun FinalizeUploadComponent(
                 }
             }
         }
-
-//        OutlinedCard(
-//            modifier = Modifier.fillMaxWidth(),
-//            shape = RoundedCornerShape(20.dp)
-//        ) {
-//            Column(
-//                modifier = Modifier
-//                    .fillMaxWidth()
-//                    .padding(16.dp),
-//                verticalArrangement = Arrangement.spacedBy(12.dp)
-//            ) {
-//                Text(
-//                    text = "Transfer steps",
-//                    style = MaterialTheme.typography.titleMedium,
-//                    fontWeight = FontWeight.SemiBold
-//                )
-//                Row(
-//                    horizontalArrangement = Arrangement.spacedBy(10.dp),
-//                    verticalAlignment = Alignment.CenterVertically
-//                ) {
-//                    AssistChip(
-//                        onClick = {},
-//                        label = { Text("Prepare") },
-//                        leadingIcon = { Icon(Icons.Default.Check, contentDescription = null) },
-//                        colors = AssistChipDefaults.assistChipColors(
-//                            containerColor = MaterialTheme.colorScheme.secondaryContainer
-//                        )
-//                    )
-//                    AssistChip(
-//                        onClick = {},
-//                        label = { Text("Upload") },
-//                        leadingIcon = {
-//                            Icon(
-//                                if (targetFraction > 0.99f) Icons.Default.Check else Icons.Default.CloudUpload,
-//                                contentDescription = null
-//                            )
-//                        }
-//                    )
-//                    AssistChip(
-//                        onClick = {},
-//                        label = { Text("Finalize") },
-//                        leadingIcon = {
-//                            Icon(
-//                                if (targetFraction > 0.99f) Icons.Default.Check else Icons.Default.Schedule,
-//                                contentDescription = null
-//                            )
-//                        }
-//                    )
-//                }
-//            }
-//        }
-//
-//        Row(
-//            modifier = Modifier.fillMaxWidth(),
-//            horizontalArrangement = Arrangement.spacedBy(12.dp),
-//            verticalAlignment = Alignment.CenterVertically
-//        ) {
-//            OutlinedButton(onClick = {}, enabled = false) { Text("Pause") }
-//            Button(onClick = {}, enabled = false, modifier = Modifier.weight(1f)) { Text("Cancel") }
-//        }
+        ElevatedCard(
+            modifier = Modifier.fillMaxWidth(),
+            elevation = CardDefaults.elevatedCardElevation(defaultElevation = 6.dp),
+            shape = RoundedCornerShape(16.dp)
+        ) {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Icon(
+                    imageVector = Icons.Outlined.Info,
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.primary,
+                    modifier = Modifier.size(20.dp)
+                )
+                Spacer(Modifier.width(12.dp))
+                Text(
+                    text = "Note: The background Upload is currently not supported",
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurface
+                )
+            }
+        }
     }
 }

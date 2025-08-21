@@ -15,6 +15,7 @@ data class VideoMetadata(
     val duration: Long,
     val status: String,
     val uploadDate: Long,
+    val nsfw: Boolean,
     val likeCount: Long,
     val dislikeCount: Long,
     val uid: String
@@ -25,6 +26,7 @@ data class CreateVideoForm(
     val title: String,
     val description: String,
     val duration: Long,
+    val nsfw: Boolean,
     val manifest: File,
     val thumbnail: File
 )

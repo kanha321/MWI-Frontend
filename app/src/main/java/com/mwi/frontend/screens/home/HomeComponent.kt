@@ -41,6 +41,7 @@ import com.mwi.frontend.ui.components.VideoItem
 import com.mwi.frontend.entity.VideoMetadata
 import com.mwi.frontend.screens.upload.UploadScreen
 import com.mwi.frontend.util.FileType
+import com.mwi.frontend.util.Resources
 import com.mwi.frontend.util.openFilePicker
 import kotlinx.coroutines.launch
 
@@ -77,6 +78,7 @@ fun HomeComponent(screenModel: HomeScreenModel) {
     }
 
     LaunchedEffect(Unit) {
+        Resources.clearCache(context)
         try {
             isLoading = true
             videoMetadata = screenModel.getAllVideos()
@@ -115,7 +117,7 @@ fun HomeComponent(screenModel: HomeScreenModel) {
     ) { innerPadding ->
         PullToRefreshBox(
             modifier = Modifier.fillMaxSize(),
-            contentAlignment = Alignment.Center,
+            contentAlignment = Alignment.TopCenter,
             isRefreshing = isLoading,
             state = rememberPullToRefreshState(),
             onRefresh = {
@@ -141,7 +143,7 @@ fun HomeComponent(screenModel: HomeScreenModel) {
                     verticalArrangement = Arrangement.Center
                 ) {
                     LoadingIndicator(
-                        modifier = Modifier.size(250.dp)
+                        modifier = Modifier.size(200.dp)
                     )
                 }
             } else if (error != null) {

@@ -3,14 +3,6 @@ package com.kanhaji.basics.theme
 import android.app.Activity
 import android.app.WallpaperManager
 import android.content.Context
-import android.os.Build
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.asPaddingValues
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.statusBars
 import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
@@ -18,9 +10,8 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
@@ -28,7 +19,6 @@ import androidx.compose.ui.platform.LocalView
 import androidx.core.view.WindowCompat
 import com.kanhaji.basics.datastore.PrefsManager
 import com.kanhaji.basics.datastore.PrefsResources
-import com.kanhaji.basics.screens.settings.components.colorToHex
 import com.kanhaji.basics.screens.settings.components.hexToColor
 import com.materialkolor.PaletteStyle
 import com.materialkolor.rememberDynamicColorScheme
@@ -44,7 +34,7 @@ fun BasicKolorTheme(
     // Step 1: Observe system dark mode changes
     ObserveSystemDarkMode(isSystemDark)
 
-    // Step 2: Initialize theme from preferences
+    // Step 2: Initialize theme from preferences (remembered across config changes)
     InitializeThemeFromPreferences(systemPrimaryColor, isSystemDark)
 
     // Step 3: Resolve seed color
@@ -69,10 +59,9 @@ fun BasicKolorTheme(
     )
 }
 
-
 @Composable
 private fun ObserveSystemDarkMode(isSystemDark: Boolean) {
-    var hasInitialized by remember { mutableStateOf(false) }
+    var hasInitialized by rememberSaveable { mutableStateOf(false) }
     LaunchedEffect(isSystemDark) {
         ThemeManager.isSystemDark = isSystemDark
         if (hasInitialized && ThemeManager.currentThemeType == ThemeManager.ThemeType.SYSTEM) {
@@ -84,18 +73,18 @@ private fun ObserveSystemDarkMode(isSystemDark: Boolean) {
 
 @Composable
 private fun InitializeThemeFromPreferences(systemPrimaryColor: Color, isSystemDark: Boolean) {
-    var hasInitialized by remember { mutableStateOf(false) }
+    var hasInitialized by rememberSaveable { mutableStateOf(false) }
     LaunchedEffect(Unit) {
         if (!hasInitialized) {
             ThemeManager.defaultSeed = systemPrimaryColor
             ThemeManager.customColor.value = systemPrimaryColor
 
-            println("MaterialKolorTheme: isDynamicColorSupported: ${isDynamicColorSupported()}")
-
             val savedTheme = PrefsManager.getString(PrefsResources.APP_THEME)
             val savedAmoled = PrefsManager.getBoolean(PrefsResources.IS_AMOLED)
             val savedDynamic = PrefsManager.getBoolean(PrefsResources.IS_DYNAMIC_COLOR)
             val savedCustomColor = PrefsManager.getString(PrefsResources.CUSTOM_COLOR)
+            val savedPaletteStyle = PrefsManager.getString(PrefsResources.PALETTE_STYLE)
+            val savedContrastLevel = PrefsManager.getDouble(PrefsResources.CONTRAST_LEVEL)
 
             ThemeManager.currentThemeType = savedTheme?.let {
                 runCatching { ThemeManager.ThemeType.valueOf(it) }
@@ -103,12 +92,18 @@ private fun InitializeThemeFromPreferences(systemPrimaryColor: Color, isSystemDa
             } ?: ThemeManager.ThemeType.SYSTEM
 
             ThemeManager.isAmoled = savedAmoled ?: false
-            ThemeManager.isDynamicColor = savedDynamic ?: isDynamicColorSupported()
             ThemeManager.isDynamicColorSupported = isDynamicColorSupported()
+            ThemeManager.isDynamicColor = savedDynamic ?: ThemeManager.isDynamicColorSupported
 
             ThemeManager.customColor = mutableStateOf(
                 savedCustomColor?.let { hexToColor(it) } ?: systemPrimaryColor
             )
+
+            ThemeManager.paletteStyle = savedPaletteStyle?.let {
+                runCatching { PaletteStyle.valueOf(it) }.getOrNull()
+            } ?: ThemeManager.paletteStyle
+
+            ThemeManager.contrastLevel = savedContrastLevel ?: ThemeManager.contrastLevel
 
             ThemeManager.isDarkTheme = when (ThemeManager.currentThemeType) {
                 ThemeManager.ThemeType.LIGHT -> false
@@ -128,7 +123,7 @@ private fun rememberSeedColor(context: Context): Color {
             val wm = WallpaperManager.getInstance(context)
             val sysColor = wm.getWallpaperColors(WallpaperManager.FLAG_SYSTEM)
             Color(sysColor?.primaryColor?.toArgb() ?: ThemeManager.customColor.value.toArgb())
-        } catch (e: Exception) {
+        } catch (_: Exception) {
             ThemeManager.customColor.value
         }
     } else {
@@ -139,13 +134,12 @@ private fun rememberSeedColor(context: Context): Color {
 @Composable
 private fun ApplySystemUiColors(colorScheme: ColorScheme) {
     val view = LocalView.current
-    val activity = view.context as Activity
+    val activity = view.context as? Activity ?: return
 
     SideEffect {
         val window = activity.window
         WindowCompat.setDecorFitsSystemWindows(window, false)
 
-        // Use transparent status bar color (mandatory)
         window.statusBarColor = android.graphics.Color.TRANSPARENT
         window.navigationBarColor = colorScheme.background.toArgb()
 
