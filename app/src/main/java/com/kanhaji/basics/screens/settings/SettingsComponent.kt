@@ -31,6 +31,7 @@ import com.kanhaji.basics.screens.settings.components.ColorPickerDialog
 import com.kanhaji.basics.screens.settings.components.ThemeSelectionDialog
 import com.kanhaji.basics.screens.settings.components.colorToHex
 import com.kanhaji.basics.theme.ThemeManager
+import com.mwi.frontend.util.AppSettingsItems
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -43,10 +44,17 @@ fun SettingsComponent() {
     }
     val listState = rememberLazyListState()
 
-    val settingsGroup = Group(
-        header = "Themes",
-        items = settingItems
+    val settingsGroup = listOf(
+        Group(
+            header = "Themes",
+            items = settingItems
+        ),
+        Group(
+            header = "App Settings",
+            items = AppSettingsItems.get()
+        )
     )
+
 
     Scaffold(
         topBar = {
@@ -75,7 +83,7 @@ fun SettingsComponent() {
             .fillMaxSize()
     ) { innerPadding ->
         GroupedLazyColumn(
-            groups = listOf(settingsGroup),
+            groups = settingsGroup,
             keySelector = { it.id },
             contentPadding = innerPadding,
             listState = listState,

@@ -12,7 +12,9 @@ import com.kanhaji.basics.screens.settings.SettingsScreen
 fun NavigationActions(
     navigator: Navigator,
     showSettingsIcon: Boolean = true,
+    actions: @Composable () -> Unit = {}
 ) {
+    actions()
     if (showSettingsIcon) {
         IconButton(
             onClick = {

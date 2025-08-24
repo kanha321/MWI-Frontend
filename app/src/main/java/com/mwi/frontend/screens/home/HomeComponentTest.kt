@@ -36,7 +36,7 @@ import com.kanhaji.basics.networking.httpClient
 import com.kanhaji.basics.screens.settings.SettingsScreen
 import com.mwi.frontend.screens.player.PlayerScreen
 import com.mwi.frontend.util.FileType
-import com.mwi.frontend.util.Resources
+import com.mwi.frontend.util.MwiUtils
 import com.mwi.frontend.util.createDashFromUri
 import com.mwi.frontend.util.openFilePicker
 import io.ktor.client.call.body
@@ -85,7 +85,7 @@ fun HomeComponentTest() {
                     }
                     IconButton(
                         onClick = {
-                            navigator.push(PlayerScreen)
+//                            navigator.push(PlayerScreen)
                         }
                     ) {
                         Icon(
@@ -122,7 +122,7 @@ fun HomeComponentTest() {
             Button(onClick = {
                 scope.launch {
                     test = try {
-                        httpClient.get("${Resources.BASE_URL}/health-check").bodyAsText()
+                        httpClient.get("${MwiUtils.BASE_URL}/health-check").bodyAsText()
                     } catch (e: Exception) {
                         "Error: ${e.message ?: "Unknown error"}"
                     }
@@ -195,7 +195,7 @@ fun HomeComponentTest() {
 
 suspend fun uploadVideo(files: List<File>, title: String, description: String): Result<String> {
     // IMPORTANT: Make sure this URL is correct. Use 10.0.2.2 for emulator -> localhost.
-    val uploadUrl = "${Resources.BASE_URL}/api/videos/upload"
+    val uploadUrl = "${MwiUtils.BASE_URL}/api/videos/upload"
 
     return try {
         // Here we use your 'httpClient' and build the request correctly
@@ -278,7 +278,7 @@ suspend fun uploadVideoInBatches(
     description: String
 ): Result<String> {
 
-    val baseUrl = "${Resources.BASE_URL}/api/videos"
+    val baseUrl = "${MwiUtils.BASE_URL}/api/videos"
 
     try {
         // STEP 1: Create video record (This part is small, readBytes() is fine here)
@@ -405,7 +405,7 @@ suspend fun uploadDashVideoInBatches(
     description: String
 ): Result<String> {
     // ... same implementation as before
-    val baseUrl = "${Resources.BASE_URL}/api/videos"
+    val baseUrl = "${MwiUtils.BASE_URL}/api/videos"
 
     try {
         // STEP 1: Create video record and upload manifest

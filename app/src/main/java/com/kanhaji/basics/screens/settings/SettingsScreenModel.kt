@@ -1,8 +1,16 @@
 package com.kanhaji.basics.screens.settings
 
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.text.BasicText
 import androidx.compose.foundation.text.TextAutoSize
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Brightness4
+import androidx.compose.material.icons.outlined.Brightness5
+import androidx.compose.material.icons.outlined.ColorLens
+import androidx.compose.material.icons.outlined.Colorize
+import androidx.compose.material.icons.outlined.DarkMode
+import androidx.compose.material.icons.outlined.Palette
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -58,7 +66,7 @@ object SettingsScreenModel : ScreenModel {
                 id = "app_theme",
                 title = "App Theme",
                 description = "Select the theme for app",
-                icon = Kmp,
+                icon = if (ThemeManager.isDarkTheme) Icons.Outlined.Brightness4 else Icons.Outlined.Brightness5,
                 widget = {
                     KButton(
                         onClick = { showThemeDialog = true },
@@ -88,7 +96,7 @@ object SettingsScreenModel : ScreenModel {
                     id = "pitch_black",
                     title = "Pitch Black",
                     description = "Useful for OLED displays to save battery",
-                    icon = Kmp,
+                    icon = Icons.Outlined.DarkMode,
                     widget = {
                         KSwitch(
                             state = ThemeManager.isAmoled,
@@ -107,7 +115,7 @@ object SettingsScreenModel : ScreenModel {
                     id = "dynamic_color",
                     title = "Dynamic Color",
                     description = "Enable wallpaper based colors",
-                    icon = Kmp,
+                    icon = Icons.Outlined.ColorLens,
                     widget = {
                         KSwitch(
                             state = ThemeManager.isDynamicColor,
@@ -126,7 +134,7 @@ object SettingsScreenModel : ScreenModel {
                     id = "app_color",
                     title = "App Color",
                     description = "Select a color for your app",
-                    icon = Kmp,
+                    icon = Icons.Outlined.Colorize,
                     widget = {},
                     onClick = { showColorPicker = true }
                 )

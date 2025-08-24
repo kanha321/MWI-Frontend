@@ -11,7 +11,7 @@ android {
 
     defaultConfig {
         applicationId = "com.mwi.frontend"
-        minSdk = 28
+        minSdk = 30
         targetSdk = 36
         versionCode = 1
         versionName = "1.0"
@@ -66,7 +66,7 @@ dependencies {
     implementation(libs.material.kolor)
     implementation(libs.colorpicker.compose)
 
-//    implementation(libs.material.icons.core)
+    implementation(libs.lottie)
 
     implementation(libs.kotlinx.serialization.json)
 

@@ -12,11 +12,7 @@ import cafe.adriel.voyager.navigator.Navigator
 import cafe.adriel.voyager.transitions.SlideTransition
 import com.kanhaji.basics.datastore.PrefsManager
 import com.kanhaji.basics.theme.BasicKolorTheme
-import com.mwi.frontend.screens.home.HomeComponentTest
-import com.mwi.frontend.screens.home.HomeScreen
-import com.mwi.frontend.screens.player.PlayerScreen
-import com.mwi.frontend.screens.test.TestScreen
-import com.mwi.frontend.screens.upload.UploadScreen
+import com.mwi.frontend.screens.splash.SplashScreen
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -30,7 +26,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier
                         .fillMaxSize()
                 ) {
-                    Navigator(TestScreen) { navigator ->
+                    Navigator(SplashScreen) { navigator ->
                         SlideTransition(navigator)
                     }
                 }

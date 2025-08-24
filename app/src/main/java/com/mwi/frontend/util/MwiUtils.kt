@@ -1,0 +1,58 @@
+package com.mwi.frontend.util
+
+import android.app.Activity
+import android.content.Context
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.platform.LocalContext
+import java.io.File
+
+object MwiUtils {
+
+    const val IP_PORT = "10.79.44.229:8080"
+    const val BASE_URL = "http://$IP_PORT"
+
+    fun clearCache(context: Context) {
+        val cacheDir = File(context.cacheDir, "UploadCache")
+        if (cacheDir.exists()) {
+            cacheDir.deleteRecursively()
+        }
+    }
+
+
+    // Helper function for time formatting
+    fun formatTime(milliseconds: Long): String {
+        val totalSeconds = milliseconds / 1000
+        val hours = totalSeconds / 3600
+        val minutes = (totalSeconds % 3600) / 60
+        val seconds = totalSeconds % 60
+
+        return if (hours > 0) {
+            "%02d:%02d:%02d".format(hours, minutes, seconds)
+        } else {
+            "%02d:%02d".format(minutes, seconds)
+        }
+    }
+
+    // Helper function to format upload date
+    fun formatUploadDate(timestamp: Long): String {
+        val now = System.currentTimeMillis()
+        val diff = now - timestamp
+
+        return when {
+            diff < 60_000 -> "Just now"
+            diff < 3600_000 -> "${diff / 60_000}m ago"
+            diff < 86400_000 -> "${diff / 3600_000}h ago"
+            diff < 604800_000 -> "${diff / 86400_000}d ago"
+            diff < 2592000_000 -> "${diff / 604800_000}w ago"
+            diff < 31536000_000 -> "${diff / 2592000_000}mo ago"
+            else -> "${diff / 31536000_000}y ago"
+        }
+    }
+
+    @Composable
+    fun getActivity(): Activity? {
+        val context = LocalContext.current
+        return context as? Activity
+    }
+
+}

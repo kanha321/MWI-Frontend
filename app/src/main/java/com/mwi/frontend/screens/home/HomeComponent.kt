@@ -11,8 +11,11 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Upload
+import androidx.compose.material.icons.outlined.Refresh
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.LoadingIndicator
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHostState
@@ -36,12 +39,13 @@ import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import com.kanhaji.basics.composables.DynamicFab
 import com.kanhaji.basics.composables.MySnackBarObject
-import com.mwi.frontend.ui.components.KAppBar
-import com.mwi.frontend.ui.components.VideoItem
 import com.mwi.frontend.entity.VideoMetadata
+import com.mwi.frontend.screens.home.components.VideoItem
+import com.mwi.frontend.screens.player.PlayerScreen
 import com.mwi.frontend.screens.upload.UploadScreen
+import com.mwi.frontend.ui.components.KAppBar
 import com.mwi.frontend.util.FileType
-import com.mwi.frontend.util.Resources
+import com.mwi.frontend.util.MwiUtils
 import com.mwi.frontend.util.openFilePicker
 import kotlinx.coroutines.launch
 
@@ -57,6 +61,20 @@ fun HomeComponent(screenModel: HomeScreenModel) {
 
 
     val scope = rememberCoroutineScope()
+
+
+    suspend fun refreshVideos() {
+        try {
+            isLoading = true
+            videoMetadata = screenModel.getAllVideos()
+            error = null
+        } catch (e: Exception) {
+            error = e.message
+        } finally {
+            isLoading = false
+        }
+    }
+
 
     val snackbarHostState = remember { SnackbarHostState() }
     MySnackBarObject.snackbarHostState = snackbarHostState
@@ -78,7 +96,7 @@ fun HomeComponent(screenModel: HomeScreenModel) {
     }
 
     LaunchedEffect(Unit) {
-        Resources.clearCache(context)
+        MwiUtils.clearCache(context)
         try {
             isLoading = true
             videoMetadata = screenModel.getAllVideos()
@@ -92,7 +110,20 @@ fun HomeComponent(screenModel: HomeScreenModel) {
 
     Scaffold(
         topBar = {
-            KAppBar()
+            KAppBar() {
+                IconButton(
+                    onClick = {
+                        scope.launch {
+                            refreshVideos()
+                        }
+                    }
+                ) {
+                    Icon(
+                        imageVector = Icons.Outlined.Refresh,
+                        contentDescription = "Refresh"
+                    )
+                }
+            }
         },
         floatingActionButton = {
             DynamicFab(
@@ -122,15 +153,7 @@ fun HomeComponent(screenModel: HomeScreenModel) {
             state = rememberPullToRefreshState(),
             onRefresh = {
                 scope.launch {
-                    try {
-                        isLoading = true
-                        videoMetadata = screenModel.getAllVideos()
-                        error = null
-                    } catch (e: Exception) {
-                        error = e.message
-                    } finally {
-                        isLoading = false
-                    }
+                    refreshVideos()
                 }
             }
         ) {
@@ -164,8 +187,10 @@ fun HomeComponent(screenModel: HomeScreenModel) {
                     state = listState,
                     modifier = Modifier.padding(innerPadding),
                 ) {
-                    itemsIndexed(videoMetadata) { _, video ->
-                        VideoItem(video)
+                    itemsIndexed(videoMetadata) { index, video ->
+                        VideoItem(video) {
+                            navigator.push(PlayerScreen(video.toString()))
+                        }
                     }
                 }
             }

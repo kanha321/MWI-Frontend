@@ -1,5 +1,6 @@
 package com.mwi.frontend.ui.components
 
+import androidx.compose.foundation.layout.RowScope
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
@@ -12,6 +13,7 @@ import cafe.adriel.voyager.navigator.currentOrThrow
 fun KAppBar(
     title: String = "MWI",
     showSettingsIcon: Boolean = true,
+    actions: @Composable RowScope.() -> Unit = {},
 ) {
     val navigator = LocalNavigator.currentOrThrow
     TopAppBar(
@@ -22,7 +24,9 @@ fun KAppBar(
             NavigationActions(
                 navigator = navigator,
                 showSettingsIcon = showSettingsIcon
-            )
+            ) {
+                actions()
+            }
         },
         navigationIcon = {
             BackNavigationIcon(navigator)

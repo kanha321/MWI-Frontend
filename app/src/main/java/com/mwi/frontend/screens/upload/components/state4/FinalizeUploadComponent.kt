@@ -66,16 +66,19 @@ fun FinalizeUploadComponent(
 
 
     // Trigger upload once per outputDir
-    val sessionKey =
-        remember(dashBuildResult.outputDir.absolutePath) { dashBuildResult.outputDir.absolutePath }
-    var started by remember(sessionKey) { mutableStateOf(false) }
+    val sessionKey = remember { dashBuildResult.outputDir.absolutePath }
+
+    // Only trigger upload once per unique dashBuildResult
     LaunchedEffect(sessionKey) {
-        if (!started) {
-            started = true
-            screenModel.screenModelScope.launch {
-                screenModel.uploadDashVideo(context, dashBuildResult) {
-                    onDone()
-                }
+        // Check if upload is already completed or in progress for this session
+        if (screenModel.uploadResult?.isSuccess == true || screenModel.isUploading) {
+            println("[UI] Upload already handled for session: $sessionKey")
+            return@LaunchedEffect
+        }
+
+        screenModel.screenModelScope.launch {
+            screenModel.uploadDashVideo(context, dashBuildResult) {
+                onDone()
             }
         }
     }

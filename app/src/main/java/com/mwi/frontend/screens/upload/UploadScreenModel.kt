@@ -6,7 +6,6 @@ import android.content.Context
 import android.net.Uri
 import android.provider.OpenableColumns
 import android.provider.Settings
-import android.widget.Toast
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableLongStateOf
@@ -23,8 +22,7 @@ import com.arthenica.ffmpegkit.Statistics
 import com.kanhaji.basics.networking.httpClient
 import com.mwi.frontend.entity.CreateVideoForm
 import com.mwi.frontend.entity.DashBuildResult
-import com.mwi.frontend.entity.UploadProgressState
-import com.mwi.frontend.util.Resources
+import com.mwi.frontend.util.MwiUtils
 import io.ktor.client.call.body
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -41,11 +39,7 @@ import io.ktor.client.request.forms.InputProvider
 import io.ktor.client.request.post
 import io.ktor.client.request.setBody
 import io.ktor.http.Headers
-import io.ktor.utils.io.core.Input
 import io.ktor.utils.io.streams.asInput
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
 import java.io.IOException
 import java.util.Locale
 import java.util.concurrent.CancellationException
@@ -566,6 +560,12 @@ class UploadScreenModel(val fileUri: String) : ScreenModel {
         }
     }
     // Public API to start building DASH with live progress suitable for UI.
+// Add these properties to track DASH conversion state
+    var dashSessionKey by mutableStateOf<String?>(null)
+    var dashResult by mutableStateOf<DashBuildResult?>(null)
+        private set
+
+    // Update buildDashFromCacheWithUi to check for existing session
     suspend fun buildDashFromCacheWithUi(
         context: Context,
         segmentDurationSec: Int = 4,
@@ -578,6 +578,29 @@ class UploadScreenModel(val fileUri: String) : ScreenModel {
             }
             return@withContext null
         }
+
+        val currentSessionKey = inputPath
+
+        // Return existing result if DASH already built for this session
+        dashResult?.let { result ->
+            if (dashSessionKey == currentSessionKey) {
+                println("[DASH] Session already completed: $currentSessionKey")
+                screenModelScope.launch(Dispatchers.Main) {
+                    onSuccess(result)
+                }
+                return@withContext result
+            }
+        }
+
+        // Prevent multiple DASH builds for the same session
+        if (dashPhase == "Packaging" && dashSessionKey == currentSessionKey) {
+            println("[DASH] Build already in progress for session: $currentSessionKey")
+            return@withContext null
+        }
+
+        // Set session key to track this DASH build
+        dashSessionKey = currentSessionKey
+
         val thumbRef = thumbnailUri ?: run {
             screenModelScope.launch(Dispatchers.Main) {
                 onFailure(IllegalStateException("No thumbnail selected"))
@@ -585,10 +608,9 @@ class UploadScreenModel(val fileUri: String) : ScreenModel {
             return@withContext null
         }
 
-        // 1) Probe duration
+        // Rest of your existing implementation...
         val durationMs = getVideoDurationMsWithFfmpeg().coerceAtLeast(0L)
 
-        // 2) Prepare output directory
         val inputFile = File(inputPath)
         val outDir = File(
             uploadCacheDir(context),
@@ -602,7 +624,6 @@ class UploadScreenModel(val fileUri: String) : ScreenModel {
         }
         val manifestFile = File(outDir, "index.mpd")
 
-        // 3) Build command (use info to get progress lines)
         val ffCmd = listOf(
             "-hide_banner",
             "-loglevel",
@@ -648,9 +669,7 @@ class UploadScreenModel(val fileUri: String) : ScreenModel {
 
                     if (success) {
                         try {
-                            // Copy thumbnail into outDir if it is not already there
                             val thumbDest = copyThumbnailTo(outDir, thumbRef, context)
-
                             val allFiles = outDir.listFiles()?.toList().orEmpty()
                             val segments = allFiles.filter { it != manifestFile && it != thumbDest }
 
@@ -661,6 +680,9 @@ class UploadScreenModel(val fileUri: String) : ScreenModel {
                                 thumbnail = thumbDest,
                                 durationMs = durationMs
                             )
+
+                            // Store the result for future use
+                            dashResult = result
 
                             screenModelScope.launch(Dispatchers.Main) {
                                 onSuccess(result)
@@ -676,7 +698,7 @@ class UploadScreenModel(val fileUri: String) : ScreenModel {
                     } else {
                         outDir.deleteRecursively()
                         screenModelScope.launch(Dispatchers.Main) {
-                            onFailure(null) // No explicit error available from FFmpegKit here
+                            onFailure(null)
                         }
                         cont.resume(null)
                     }
@@ -704,8 +726,22 @@ class UploadScreenModel(val fileUri: String) : ScreenModel {
         }
     }
 
+    // Add function to reset DASH state when starting fresh
+    fun resetDashState() {
+        dashSessionKey = null
+        dashResult = null
+        clearDashTelemetry()
+    }
+
+    // Update resetUploadState to also reset DASH state if needed
+    fun resetAllStates() {
+        resetDashState()
+        resetUploadState()
+    }
+
+
     private fun copyThumbnailTo(outDir: File, thumb: String, context: Context): File {
-        val uri = runCatching { Uri.parse(thumb) }.getOrNull()
+        val uri = runCatching { thumb.toUri() }.getOrNull()
         val dest = File(outDir, "thumbnail.png")
 
         return if (uri != null && (uri.scheme == "content" || uri.scheme == "file")) {
@@ -791,13 +827,37 @@ class UploadScreenModel(val fileUri: String) : ScreenModel {
     }
 
     // 2) Replace your uploadDashVideo with this version (logic unchanged, telemetry added)
+    private var uploadSessionKey by mutableStateOf<String?>(null)
+    var uploadResult by mutableStateOf<Result<String>?>(null)
+        private set
+
+    // Update the uploadDashVideo function to check for existing session
     suspend fun uploadDashVideo(
         context: Context,
         dashBuildResult: DashBuildResult,
-        apiBase: String = Resources.BASE_URL,
+        apiBase: String = MwiUtils.BASE_URL,
         batchSize: Int = 5,
         onDone: () -> Unit = {}
     ): Result<String> = withContext(Dispatchers.IO) {
+        val currentSessionKey = dashBuildResult.outputDir.absolutePath
+
+        // Return existing result if upload already completed for this session
+        uploadResult?.let { result ->
+            if (uploadSessionKey == currentSessionKey) {
+                println("[Upload] Session already completed: $currentSessionKey")
+                return@withContext result
+            }
+        }
+
+        // Prevent multiple uploads for the same session
+        if (isUploading && uploadSessionKey == currentSessionKey) {
+            println("[Upload] Upload already in progress for session: $currentSessionKey")
+            return@withContext Result.failure(IllegalStateException("Upload already in progress"))
+        }
+
+        // Set session key to track this upload
+        uploadSessionKey = currentSessionKey
+
         try {
             val form = CreateVideoForm(
                 uId = getDeviceId(context),
@@ -823,7 +883,6 @@ class UploadScreenModel(val fileUri: String) : ScreenModel {
                 uploadEtaSeconds = 0L
             }
 
-            // Add nsfw in the create multipart
             println("[Upload] Create: start")
             val videoId = httpClient.post("$apiBase/api/videos/create") {
                 setBody(
@@ -832,7 +891,7 @@ class UploadScreenModel(val fileUri: String) : ScreenModel {
                             append("uId", form.uId)
                             append("title", form.title)
                             append("description", form.description)
-                            append("nsfw", form.nsfw.toString()) // <-- send nsfw as true/false
+                            append("nsfw", form.nsfw.toString())
                             append("duration", form.duration.toString())
 
                             append(
@@ -867,7 +926,11 @@ class UploadScreenModel(val fileUri: String) : ScreenModel {
                 updateUploadTelemetry(totalBytes, uploadedBytes, startedNs)
             }
 
-            if (videoId.isBlank()) return@withContext Result.failure(IllegalStateException("Empty videoId"))
+            if (videoId.isBlank()) {
+                val result = Result.failure<String>(IllegalStateException("Empty videoId"))
+                uploadResult = result
+                return@withContext result
+            }
 
             val batches = if (batchSize <= 0) listOf(segments) else segments.chunked(batchSize)
             val totalFiles = segments.size
@@ -916,17 +979,28 @@ class UploadScreenModel(val fileUri: String) : ScreenModel {
             println("[Upload] Finalize: success")
             updateUploadTelemetry(totalBytes, totalBytes, startedNs)
 
-            Result.success(videoId)
+            val result = Result.success(videoId)
+            uploadResult = result
+            result
         } catch (e: Exception) {
             println("[Upload] Failed: ${e.message}")
             e.printStackTrace()
-            Result.failure(e)
+            val result = Result.failure<String>(e)
+            uploadResult = result
+            result
         } finally {
             screenModelScope.launch(Dispatchers.Main) {
                 isUploading = false
                 onDone()
             }
         }
+    }
+
+    // Add function to reset upload state when starting fresh
+    fun resetUploadState() {
+        uploadSessionKey = null
+        uploadResult = null
+        resetUploadTelemetry()
     }
 
     // delete cache

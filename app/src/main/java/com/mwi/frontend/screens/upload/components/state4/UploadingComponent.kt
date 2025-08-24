@@ -30,34 +30,33 @@ fun UploadingComponent(
     val navigator = LocalNavigator.currentOrThrow
 
     var showUploadVideoComponent by remember { mutableStateOf(false) }
-    var dashResult by remember { mutableStateOf<DashBuildResult?>(null) }
     var showDoneButton by remember { mutableStateOf(false) }
 
-    LaunchedEffect(screenModel.cachedVideoPath) {
-        screenModel.buildDashFromCacheWithUi(
-            context = context,
-            onSuccess = { result ->
-                dashResult = result
-                showUploadVideoComponent = true
-            }
-        )
+    // Use persistent session key that doesn't change on recomposition
+    val sessionKey = remember { screenModel.cachedVideoPath }
+
+    LaunchedEffect(sessionKey) {
+        // Check if DASH is already built for this session
+        if (screenModel.dashResult != null && screenModel.dashSessionKey == sessionKey) {
+            println("[UI] DASH already built for session: $sessionKey")
+            showUploadVideoComponent = true
+            return@LaunchedEffect
+        }
+
+        // Only start DASH build if not already completed or in progress
+        if (screenModel.dashPhase != "Packaging") {
+            screenModel.buildDashFromCacheWithUi(
+                context = context,
+                onSuccess = { result ->
+                    showUploadVideoComponent = true
+                }
+            )
+        }
     }
 
     Column {
-        AnimatedVisibility(showUploadVideoComponent && dashResult != null) {
-//            // TODO: replace with your actual API base URL (e.g., from BuildConfig or settings)
-//            val baseUrl = "http://10.14.90.86:8080"
-//            UploadVideoComponent(
-//                screenModel = screenModel,
-//                dash = dashResult!!,
-//                baseUrl = baseUrl,
-//                onCompleted = {
-//                    // Optionally advance to Completed step
-//                    // screenModel.nextStep()
-//                }
-//            )
-
-            FinalizeUploadComponent(screenModel, dashResult!!)
+        AnimatedVisibility(showUploadVideoComponent && screenModel.dashResult != null) {
+            FinalizeUploadComponent(screenModel, screenModel.dashResult!!)
         }
         ConvertingComponent(screenModel)
         AnimatedVisibility(showDoneButton) {
@@ -72,9 +71,4 @@ fun UploadingComponent(
             }
         }
     }
-}
-
-enum class UploadStatus(val status: String) {
-    CONVERTING("Converting"),
-    UPLOADING("Uploading"),
 }

@@ -1,7 +1,6 @@
 package com.mwi.frontend.entity
 
 import androidx.compose.runtime.Immutable
-import com.mwi.frontend.screens.upload.components.state4.UploadStatus
 import kotlinx.serialization.Serializable
 import java.io.File
 
@@ -10,8 +9,8 @@ data class VideoMetadata(
     val id: Long,
     val title: String,
     val description: String,
-    val videoUrl: String, // Made this a 'var' so it can be updated
-    val thumbnailUrl: String, // Made this a 'var' so it can be updated
+    val videoUrl: String,
+    val thumbnailUrl: String,
     val duration: Long,
     val status: String,
     val uploadDate: Long,
@@ -19,7 +18,49 @@ data class VideoMetadata(
     val likeCount: Long,
     val dislikeCount: Long,
     val uid: String
-)
+) {
+    override fun toString(): String {
+        return "id: $id\n" +
+                "title: $title\n" +
+                "description: $description\n" +
+                "videoUrl: $videoUrl\n" +
+                "thumbnailUrl: $thumbnailUrl\n" +
+                "duration: $duration\n" +
+                "status: $status\n" +
+                "uploadDate: $uploadDate\n" +
+                "nsfw: $nsfw\n" +
+                "likeCount: $likeCount\n" +
+                "dislikeCount: $dislikeCount\n" +
+                "uid: $uid"
+    }
+
+    companion object {
+        fun parseString(videoMetadataString : String) : VideoMetadata {
+            val lines = videoMetadataString.split("\n")
+            val map = mutableMapOf<String, String>()
+            for (line in lines) {
+                val parts = line.split(": ", limit = 2)
+                if (parts.size == 2) {
+                    map[parts[0]] = parts[1]
+                }
+            }
+            return VideoMetadata(
+                id = map["id"]?.toLong() ?: 0L,
+                title = map["title"] ?: "",
+                description = map["description"] ?: "",
+                videoUrl = map["videoUrl"] ?: "",
+                thumbnailUrl = map["thumbnailUrl"] ?: "",
+                duration = map["duration"]?.toLong() ?: 0L,
+                status = map["status"] ?: "",
+                uploadDate = map["uploadDate"]?.toLong() ?: 0L,
+                nsfw = map["nsfw"]?.toBoolean() ?: false,
+                likeCount = map["likeCount"]?.toLong() ?: 0L,
+                dislikeCount = map["dislikeCount"]?.toLong() ?: 0L,
+                uid = map["uid"] ?: ""
+            )
+        }
+    }
+}
 
 data class CreateVideoForm(
     val uId: String,
