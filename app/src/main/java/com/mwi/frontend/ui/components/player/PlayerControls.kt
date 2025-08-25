@@ -1,5 +1,7 @@
 package com.mwi.frontend.ui.components.player
 
+import android.os.SystemClock
+import android.view.ViewConfiguration
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -18,17 +20,21 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.media3.common.Player
 import androidx.media3.exoplayer.ExoPlayer
+import com.mwi.frontend.util.videoSeek
 import kotlinx.coroutines.delay
 
 @Composable
 fun PlayerControls(
     exoPlayer: ExoPlayer,
+    videoTitle: String = "",
 ) {
     var showControls by remember { mutableStateOf(true) }
     var isPlaying by remember { mutableStateOf(false) }
     var currentPosition by remember { mutableLongStateOf(0L) }
     var totalDuration by remember { mutableLongStateOf(0L) }
     var isSeeking by remember { mutableStateOf(false) }
+
+    var lastTapTime by remember { mutableLongStateOf(0L) }
 
     LaunchedEffect(isPlaying, isSeeking) {
         if (isPlaying && !isSeeking) {
@@ -67,11 +73,7 @@ fun PlayerControls(
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .pointerInput(Unit) {
-                detectTapGestures(
-                    onTap = { showControls = !showControls }
-                )
-            }
+            .videoSeek(exoPlayer = exoPlayer) { showControls = !showControls }
     ) {
         AnimatedVisibility(
             visible = showControls,
@@ -95,7 +97,8 @@ fun PlayerControls(
                 },
                 onProgressChange = { position ->
                     currentPosition = position
-                }
+                },
+                videoTitle = videoTitle
             )
         }
     }

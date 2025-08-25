@@ -23,6 +23,7 @@ import com.kanhaji.basics.networking.httpClient
 import com.mwi.frontend.entity.CreateVideoForm
 import com.mwi.frontend.entity.DashBuildResult
 import com.mwi.frontend.util.MwiUtils
+import com.mwi.frontend.util.reduceSpaces
 import io.ktor.client.call.body
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -861,8 +862,8 @@ class UploadScreenModel(val fileUri: String) : ScreenModel {
         try {
             val form = CreateVideoForm(
                 uId = getDeviceId(context),
-                title = title,
-                description = description,
+                title = title.reduceSpaces(),
+                description = description.reduceSpaces(),
                 nsfw = nsfw,
                 duration = dashBuildResult.durationMs,
                 manifest = dashBuildResult.manifest,
@@ -1017,8 +1018,8 @@ class UploadScreenModel(val fileUri: String) : ScreenModel {
     fun getData(context: Context, dashBuildResult: DashBuildResult): String {
         val createVideoForm = CreateVideoForm(
             uId = getDeviceId(context),
-            title = title,
-            description = description,
+            title = title.reduceSpaces(),
+            description = description.reduceSpaces(),
             nsfw = nsfw,
             duration = dashBuildResult.durationMs,
             manifest = dashBuildResult.manifest,

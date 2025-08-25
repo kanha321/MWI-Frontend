@@ -18,6 +18,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.media3.common.Player
 import androidx.media3.exoplayer.ExoPlayer
+import com.mwi.frontend.util.videoSeek
 import kotlinx.coroutines.delay
 
 @Composable
@@ -67,11 +68,7 @@ fun PreviewControls(
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .pointerInput(Unit) {
-                detectTapGestures(
-                    onTap = { showControls = !showControls }
-                )
-            }
+            .videoSeek(exoPlayer) { showControls = !showControls }
     ) {
         AnimatedVisibility(
             visible = showControls,

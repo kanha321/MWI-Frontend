@@ -7,6 +7,8 @@ import com.mwi.frontend.util.MwiUtils
 import io.ktor.client.call.body
 import io.ktor.client.request.get
 import io.ktor.client.request.header
+import io.ktor.client.request.parameter
+import io.ktor.client.request.setBody
 import io.ktor.client.statement.bodyAsText
 import io.ktor.http.ContentType
 import io.ktor.http.HttpHeaders
@@ -14,15 +16,14 @@ import io.ktor.http.contentType
 
 class HomeScreenModel : ScreenModel {
 
-    suspend fun getAllVideos(): List<VideoMetadata> {
+    suspend fun getAllVideos(nsfw: Boolean): List<VideoMetadata> {
         val response = httpClient.get("${MwiUtils.BASE_URL}/api/videos") {
             contentType(ContentType.Application.Json)
             header(HttpHeaders.ContentType, ContentType.Application.Json)
+            parameter("nsfw", nsfw)
         }
-        println(response.bodyAsText())
         val videos = response.body<List<VideoMetadata>>()
 
         return videos
     }
-
 }

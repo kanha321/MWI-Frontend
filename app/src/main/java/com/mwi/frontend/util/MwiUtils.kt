@@ -3,13 +3,18 @@ package com.mwi.frontend.util
 import android.app.Activity
 import android.content.Context
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
 import java.io.File
 
 object MwiUtils {
 
-    const val IP_PORT = "10.79.44.229:8080"
+    const val IP_PORT = "10.234.29.86:8080"
     const val BASE_URL = "http://$IP_PORT"
+
+    var isLandscape by mutableStateOf(false)
 
     fun clearCache(context: Context) {
         val cacheDir = File(context.cacheDir, "UploadCache")

@@ -10,21 +10,27 @@ import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import com.kanhaji.basics.composables.KSwitch
 import com.mwi.frontend.screens.upload.UploadScreenModel
 import kotlin.math.min
+import androidx.compose.runtime.remember
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -36,6 +42,10 @@ fun InfoComponent(
 ) {
     val titleLen = min(screenModel.title.length, maxTitleLen)
     val descLen = min(screenModel.description.length, maxDescriptionLen)
+
+    val focusManager = LocalFocusManager.current
+    val titleFocusRequester = remember { FocusRequester() }
+    val descriptionFocusRequester = remember { FocusRequester() }
 
     Column(
         modifier = modifier
@@ -61,34 +71,42 @@ fun InfoComponent(
                     color = MaterialTheme.colorScheme.onSurface
                 )
 
-                // Title
                 OutlinedTextField(
                     value = screenModel.title,
                     onValueChange = { screenModel.title = it.take(maxTitleLen) },
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .focusRequester(titleFocusRequester),
                     singleLine = true,
                     label = { Text("Title") },
                     placeholder = { Text("Add a short, clear title") },
-                    supportingText = { Text("$titleLen/$maxTitleLen") }
+                    supportingText = { Text("$titleLen/$maxTitleLen") },
+                    keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Next),
+                    keyboardActions = KeyboardActions(
+                        onNext = { descriptionFocusRequester.requestFocus() }
+                    )
                 )
 
-                // Description
                 OutlinedTextField(
                     value = screenModel.description,
                     onValueChange = { screenModel.description = it.take(maxDescriptionLen) },
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(140.dp),
+                        .height(140.dp)
+                        .focusRequester(descriptionFocusRequester),
                     label = { Text("Description") },
                     placeholder = { Text("Describe what viewers will see") },
                     minLines = 4,
                     maxLines = 8,
-                    supportingText = { Text("$descLen/$maxDescriptionLen") }
+                    supportingText = { Text("$descLen/$maxDescriptionLen") },
+                    keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Done),
+                    keyboardActions = KeyboardActions(
+                        onDone = { focusManager.clearFocus() }
+                    )
                 )
 
                 Divider()
 
-                // NSFW switch
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     verticalAlignment = Alignment.CenterVertically

@@ -44,6 +44,7 @@ import com.mwi.frontend.screens.home.components.VideoItem
 import com.mwi.frontend.screens.player.PlayerScreen
 import com.mwi.frontend.screens.upload.UploadScreen
 import com.mwi.frontend.ui.components.KAppBar
+import com.mwi.frontend.util.AppSettingsItems
 import com.mwi.frontend.util.FileType
 import com.mwi.frontend.util.MwiUtils
 import com.mwi.frontend.util.openFilePicker
@@ -66,7 +67,7 @@ fun HomeComponent(screenModel: HomeScreenModel) {
     suspend fun refreshVideos() {
         try {
             isLoading = true
-            videoMetadata = screenModel.getAllVideos()
+            videoMetadata = screenModel.getAllVideos(nsfw = AppSettingsItems.showNsfwContent)
             error = null
         } catch (e: Exception) {
             error = e.message
@@ -99,7 +100,7 @@ fun HomeComponent(screenModel: HomeScreenModel) {
         MwiUtils.clearCache(context)
         try {
             isLoading = true
-            videoMetadata = screenModel.getAllVideos()
+            videoMetadata = screenModel.getAllVideos(nsfw = AppSettingsItems.showNsfwContent)
             error = null
         } catch (e: Exception) {
             error = e.message

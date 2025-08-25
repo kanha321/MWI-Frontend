@@ -1,5 +1,9 @@
 package com.mwi.frontend.ui.components.player
 
+import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.snap
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -40,12 +44,22 @@ fun ProgressSlider(
     var isDragging by remember { mutableStateOf(false) }
     var sliderValue by remember { mutableFloatStateOf(0f) }
 
-    // Use slider value when dragging, otherwise calculate from current position
-    val progress = if (isDragging) {
-        sliderValue
-    } else {
+    val baseProgress =
         if (totalDuration > 0) currentPosition.toFloat() / totalDuration else 0f
-    }
+    val targetProgress = if (isDragging) sliderValue else baseProgress
+
+    // Animate only when not dragging (seek jump or normal playback update)
+    val animatedProgress by animateFloatAsState(
+        targetValue = targetProgress.coerceIn(0f, 1f),
+        animationSpec = if (isDragging) {
+            snap() // no animation while user drags
+        } else {
+            tween(durationMillis = 50, easing = FastOutSlowInEasing)
+        },
+        label = "seekProgress"
+    )
+
+    val visualProgress = if (isDragging) sliderValue else animatedProgress
 
     Box(
         modifier = modifier
@@ -53,7 +67,7 @@ fun ProgressSlider(
             .height(20.dp)
     ) {
         LinearWavyProgressIndicator(
-            progress = { progress },
+            progress = { visualProgress },
             waveSpeed = if (isPlaying && !isDragging) WavyProgressIndicatorDefaults.LinearDeterminateWavelength else 0.dp,
             color = MaterialTheme.colorScheme.tertiaryFixed.copy(alpha = 0.8f),
             trackColor = Color.Gray.copy(alpha = 0.5f),
@@ -64,7 +78,7 @@ fun ProgressSlider(
         )
 
         Slider(
-            value = progress,
+            value = visualProgress,
             onValueChange = { newProgress ->
                 if (!isDragging) {
                     isDragging = true
