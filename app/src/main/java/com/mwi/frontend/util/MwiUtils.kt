@@ -13,7 +13,7 @@ import java.io.File
 
 object MwiUtils {
 
-    const val IP_PORT = "10.222.126.86:8080"
+    const val IP_PORT = "172.31.90.2:8080"
     const val BASE_URL = "http://$IP_PORT"
 
     var appVersionCode: Long = -1 // Initialized in MainActivity
