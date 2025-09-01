@@ -1,18 +1,32 @@
-*.iml
-.kotlin
-.gradle
-**/build/
-xcuserdata
-!src/**/build/
+# Gradle
+.gradle/
+build/
+*/build/
+!gradle/wrapper/gradle-wrapper.jar
+
+# Local configuration
 local.properties
-.idea
+
+# Android Studio/IntelliJ
+.idea/
+*.iml
+
+# OS files
 .DS_Store
-captures
-.externalNativeBuild
-.cxx
-*.xcodeproj/*
-!*.xcodeproj/project.pbxproj
-!*.xcodeproj/xcshareddata/
-!*.xcodeproj/project.xcworkspace/
-!*.xcworkspace/contents.xcworkspacedata
-**/xcshareddata/WorkspaceSettings.xcsettings
+
+# External native build
+.externalNativeBuild/
+.cxx/
+
+# Captures and generated files
+captures/
+output.json
+
+# Release folder (if you don't want to push release builds)
+app/release/
+
+# Kotlin build cache
+.kotlin/
+
+# Misc
+*.log
