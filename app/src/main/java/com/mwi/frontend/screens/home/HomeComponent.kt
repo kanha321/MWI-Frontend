@@ -1,8 +1,10 @@
 package com.mwi.frontend.screens.home
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
@@ -31,6 +33,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -39,6 +42,7 @@ import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import com.kanhaji.basics.composables.DynamicFab
 import com.kanhaji.basics.composables.MySnackBarObject
+import com.kanhaji.basics.util.Updater
 import com.mwi.frontend.entity.VideoMetadata
 import com.mwi.frontend.screens.home.components.VideoItem
 import com.mwi.frontend.screens.player.PlayerScreen
@@ -56,31 +60,26 @@ fun HomeComponent(screenModel: HomeScreenModel) {
     val navigator = LocalNavigator.currentOrThrow
     val context = LocalContext.current
 
-    var videoMetadata by remember { mutableStateOf<List<VideoMetadata>>(emptyList()) }
-    var isLoading by remember { mutableStateOf(true) }
-    var error by remember { mutableStateOf<String?>(null) }
-
+// ---- States from ScreenModel ----
+    val videos by remember { derivedStateOf { screenModel.videos } }
+    val isLoading by remember { derivedStateOf { screenModel.videosIsLoading } }
+    val error by remember { derivedStateOf { screenModel.error } }
 
     val scope = rememberCoroutineScope()
 
-
+    // ---- Refresh Function ----
     suspend fun refreshVideos() {
         try {
-            isLoading = true
-            videoMetadata = screenModel.getAllVideos(nsfw = AppSettingsItems.showNsfwContent)
-            error = null
+            screenModel.resetVideos(AppSettingsItems.showNsfwContent)
         } catch (e: Exception) {
-            error = e.message
-        } finally {
-            isLoading = false
+            screenModel.error = e.message
         }
     }
-
 
     val snackbarHostState = remember { SnackbarHostState() }
     MySnackBarObject.snackbarHostState = snackbarHostState
 
-    // Detect scroll direction
+// ---- Detect scroll direction ----
     val listState = rememberLazyListState()
     var fabVisible by remember { mutableStateOf(true) }
     var lastScrollOffset by remember { mutableIntStateOf(0) }
@@ -96,22 +95,35 @@ fun HomeComponent(screenModel: HomeScreenModel) {
         }
     }
 
+// ---- Initial Load ----
     LaunchedEffect(Unit) {
-        MwiUtils.clearCache(context)
         try {
-            isLoading = true
-            videoMetadata = screenModel.getAllVideos(nsfw = AppSettingsItems.showNsfwContent)
-            error = null
+            screenModel.resetVideos(AppSettingsItems.showNsfwContent)
+            screenModel.error = null
         } catch (e: Exception) {
-            error = e.message
-        } finally {
-            isLoading = false
+            screenModel.error = e.message
+        }
+        if (!Updater.updateChecked) Updater.checkForUpdates()
+        MwiUtils.clearCache(context)
+    }
+
+// ---- Infinite Scroll Trigger ----
+    LaunchedEffect(listState) {
+        snapshotFlow {
+            listState.layoutInfo.visibleItemsInfo.lastOrNull()?.index
+        }.collect { lastVisibleItem ->
+            val totalItems = videos.size
+            if (lastVisibleItem != null && lastVisibleItem >= totalItems - 1 && !isLoading) {
+                // Load next page when user is near bottom
+                screenModel.loadNextVideosPage(AppSettingsItems.showNsfwContent)
+            }
         }
     }
 
+
     Scaffold(
         topBar = {
-            KAppBar() {
+            KAppBar {
                 IconButton(
                     onClick = {
                         scope.launch {
@@ -150,7 +162,7 @@ fun HomeComponent(screenModel: HomeScreenModel) {
         PullToRefreshBox(
             modifier = Modifier.fillMaxSize(),
             contentAlignment = Alignment.TopCenter,
-            isRefreshing = isLoading,
+            isRefreshing = isLoading, // <- from screenModel
             state = rememberPullToRefreshState(),
             onRefresh = {
                 scope.launch {
@@ -158,39 +170,57 @@ fun HomeComponent(screenModel: HomeScreenModel) {
                 }
             }
         ) {
-            if (isLoading) {
-                Column(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(innerPadding),
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.Center
-                ) {
-                    LoadingIndicator(
-                        modifier = Modifier.size(200.dp)
-                    )
+            when {
+                isLoading && videos.isEmpty() -> {
+                    Column(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(innerPadding),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.Center
+                    ) {
+                        LoadingIndicator(
+                            modifier = Modifier.size(200.dp)
+                        )
+                    }
                 }
-            } else if (error != null) {
-                Column(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(innerPadding),
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.Center
-                ) {
-                    Text(
-                        text = "Error: ${error ?: "Unknown error"}",
-                        modifier = Modifier.padding(16.dp)
-                    )
+                error != null -> {
+                    Column(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(innerPadding),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.Center
+                    ) {
+                        Text(
+                            text = "Error: ${error ?: "Unknown error"}",
+                            modifier = Modifier.padding(16.dp)
+                        )
+                    }
                 }
-            } else {
-                LazyColumn(
-                    state = listState,
-                    modifier = Modifier.padding(innerPadding),
-                ) {
-                    itemsIndexed(videoMetadata) { index, video ->
-                        VideoItem(video) {
-                            navigator.push(PlayerScreen(video.toString()))
+                else -> {
+                    LazyColumn(
+                        state = listState,
+                        modifier = Modifier.padding(innerPadding),
+                    ) {
+                        itemsIndexed(videos) { index, video ->
+                            VideoItem(video) {
+                                navigator.push(PlayerScreen(video.toString()))
+                            }
+                        }
+
+                        // Optional: show loading indicator at bottom when fetching next page
+                        if (isLoading && videos.isNotEmpty()) {
+                            item {
+                                Box(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(16.dp),
+                                    contentAlignment = Alignment.Center
+                                ) {
+                                    LoadingIndicator()
+                                }
+                            }
                         }
                     }
                 }

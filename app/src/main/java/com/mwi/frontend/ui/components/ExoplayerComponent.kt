@@ -53,6 +53,8 @@ fun ExoPlayerComponent(
     rotateScreen: Boolean = false,
     onPlaybackPositionChanged: (Long) -> Unit = {},
     onPlayerReady: (ExoPlayer) -> Unit = {},
+    onLaunch: () -> Unit = {},
+    onDispose: () -> Unit = {},
     customControls: @Composable (ExoPlayer) -> Unit = { exoPlayer ->
         PreviewControls(exoPlayer)
     }
@@ -108,6 +110,7 @@ fun ExoPlayerComponent(
         }
         exoPlayer.addListener(listener)
 
+        onLaunch()
 
         // hide system bars for fullscreen experience
         if (hideSystemBars) {
@@ -133,6 +136,8 @@ fun ExoPlayerComponent(
             // Ensure no background audio after leaving composition
             exoPlayer.pause()
             exoPlayer.release()
+
+            onDispose()
 
             // restore system bars
             if (hideSystemBars) {

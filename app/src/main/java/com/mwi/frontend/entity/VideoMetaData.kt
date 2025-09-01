@@ -1,6 +1,7 @@
 package com.mwi.frontend.entity
 
 import androidx.compose.runtime.Immutable
+import com.mwi.frontend.util.VideoType
 import kotlinx.serialization.Serializable
 import java.io.File
 
@@ -17,6 +18,7 @@ data class VideoMetadata(
     val nsfw: Boolean,
     val likeCount: Long,
     val dislikeCount: Long,
+    val views: Long,
     val uid: String
 ) {
     override fun toString(): String {
@@ -56,11 +58,22 @@ data class VideoMetadata(
                 nsfw = map["nsfw"]?.toBoolean() ?: false,
                 likeCount = map["likeCount"]?.toLong() ?: 0L,
                 dislikeCount = map["dislikeCount"]?.toLong() ?: 0L,
+                views = map["views"]?.toLong() ?: 0L,
                 uid = map["uid"] ?: ""
             )
         }
     }
 }
+
+
+@Serializable
+data class PagedResult<T>(
+    val items: List<T>,
+    val totalItems: Int,
+    val totalPages: Int,
+    val currentPage: Int,
+    val pageSize: Int
+)
 
 data class CreateVideoForm(
     val uId: String,
@@ -69,7 +82,8 @@ data class CreateVideoForm(
     val duration: Long,
     val nsfw: Boolean,
     val manifest: File,
-    val thumbnail: File
+    val thumbnail: File,
+    val videoType: VideoType = VideoType.HEAPS
 )
 
 data class SegmentBatchForm(

@@ -351,14 +351,6 @@ class UploadScreenModel(val fileUri: String) : ScreenModel {
         }
     }
 
-    @SuppressLint("HardwareIds")
-    fun getDeviceId(context: Context): String {
-        return Settings.Secure.getString(
-            context.contentResolver,
-            Settings.Secure.ANDROID_ID
-        ) ?: "unknown_device"
-    }
-
     suspend fun buildDashFromCache(
         context: Context,
         segmentDurationSec: Int = 4
@@ -861,7 +853,7 @@ class UploadScreenModel(val fileUri: String) : ScreenModel {
 
         try {
             val form = CreateVideoForm(
-                uId = getDeviceId(context),
+                uId = MwiUtils.getDeviceId(context),
                 title = title.reduceSpaces(),
                 description = description.reduceSpaces(),
                 nsfw = nsfw,
@@ -1017,7 +1009,7 @@ class UploadScreenModel(val fileUri: String) : ScreenModel {
 
     fun getData(context: Context, dashBuildResult: DashBuildResult): String {
         val createVideoForm = CreateVideoForm(
-            uId = getDeviceId(context),
+            uId = MwiUtils.getDeviceId(context),
             title = title.reduceSpaces(),
             description = description.reduceSpaces(),
             nsfw = nsfw,

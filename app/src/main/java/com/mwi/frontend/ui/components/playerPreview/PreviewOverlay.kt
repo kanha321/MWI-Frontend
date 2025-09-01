@@ -6,11 +6,15 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import com.kanhaji.basics.theme.ThemeManager
+import com.kanhaji.basics.theme.getSystemPrimaryColor
+import com.materialkolor.rememberDynamicColorScheme
 
 @Composable
 fun PreviewOverlay(
@@ -23,36 +27,45 @@ fun PreviewOverlay(
     onProgressChange: (Long) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    Box(
-        modifier = modifier
-            .fillMaxSize()
-            .background(Color.Black.copy(alpha = 0.2f))
+    val darkColorScheme = rememberDynamicColorScheme(
+        seedColor = if (ThemeManager.isDynamicColor) getSystemPrimaryColor() else ThemeManager.customColor.value,
+        isDark = true
+    )
+
+    MaterialTheme(
+        colorScheme = darkColorScheme
     ) {
-        PlayPauseButton(
-            isPlaying = isPlaying,
-            onPlayPause = onPlayPause,
-            modifier = Modifier.align(Alignment.Center)
-        )
-
-        Column(
-            modifier = Modifier
-                .align(Alignment.BottomCenter)
-                .fillMaxWidth()
-                .padding(horizontal = 16.dp, vertical = 8.dp)
+        Box(
+            modifier = modifier
+                .fillMaxSize()
+                .background(Color.Black.copy(alpha = 0.2f))
         ) {
-            TimeDisplay(
-                currentPosition = currentPosition,
-                totalDuration = totalDuration
+            PlayPauseButton(
+                isPlaying = isPlaying,
+                onPlayPause = onPlayPause,
+                modifier = Modifier.align(Alignment.Center)
             )
 
-            ProgressSlider(
-                currentPosition = currentPosition,
-                totalDuration = totalDuration,
-                isPlaying = isPlaying,
-                onSeekStart = onSeekStart,
-                onSeekEnd = onSeekEnd,
-                onProgressChange = onProgressChange
-            )
+            Column(
+                modifier = Modifier
+                    .align(Alignment.BottomCenter)
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp, vertical = 8.dp)
+            ) {
+                TimeDisplay(
+                    currentPosition = currentPosition,
+                    totalDuration = totalDuration
+                )
+
+                ProgressSlider(
+                    currentPosition = currentPosition,
+                    totalDuration = totalDuration,
+                    isPlaying = isPlaying,
+                    onSeekStart = onSeekStart,
+                    onSeekEnd = onSeekEnd,
+                    onProgressChange = onProgressChange
+                )
+            }
         }
     }
 }

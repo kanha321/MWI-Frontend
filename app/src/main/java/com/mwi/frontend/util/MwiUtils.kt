@@ -1,7 +1,9 @@
 package com.mwi.frontend.util
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
+import android.provider.Settings
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -11,10 +13,14 @@ import java.io.File
 
 object MwiUtils {
 
-    const val IP_PORT = "10.234.29.86:8080"
+    const val IP_PORT = "10.222.126.86:8080"
     const val BASE_URL = "http://$IP_PORT"
 
+    var appVersionCode: Long = -1 // Initialized in MainActivity
+
     var isLandscape by mutableStateOf(false)
+
+    var deviceId = "" // Initialized in MainActivity
 
     fun clearCache(context: Context) {
         val cacheDir = File(context.cacheDir, "UploadCache")
@@ -60,4 +66,17 @@ object MwiUtils {
         return context as? Activity
     }
 
+    @SuppressLint("HardwareIds")
+    fun getDeviceId(context: Context): String {
+        return Settings.Secure.getString(
+            context.contentResolver,
+            Settings.Secure.ANDROID_ID
+        ) ?: "unknown_device"
+    }
+
+}
+
+enum class VideoType(val type: String) {
+    NODES(type = "Nodes"),
+    HEAPS(type = "Heaps"),
 }

@@ -13,6 +13,7 @@ import cafe.adriel.voyager.transitions.SlideTransition
 import com.kanhaji.basics.datastore.PrefsManager
 import com.kanhaji.basics.theme.BasicKolorTheme
 import com.mwi.frontend.screens.splash.SplashScreen
+import com.mwi.frontend.util.MwiUtils
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -20,6 +21,8 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         PrefsManager.init(this)
+        MwiUtils.deviceId = MwiUtils.getDeviceId(this)
+        MwiUtils.appVersionCode = packageManager.getPackageInfo(packageName, 0).longVersionCode
         setContent {
             BasicKolorTheme {
                 Box(

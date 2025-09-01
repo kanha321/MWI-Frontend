@@ -73,7 +73,9 @@ fun VideoItem(
                         .fillMaxSize()
                         .clip(RoundedCornerShape(topStart = 12.dp, topEnd = 12.dp))
                         .then(
-                            if (videoMetadata.nsfw && !AppSettingsItems.showNsfwContent) Modifier.blur(30.dp) else Modifier
+                            if (videoMetadata.nsfw && !AppSettingsItems.showNsfwContent) Modifier.blur(
+                                30.dp
+                            ) else Modifier
                         ),
                     contentScale = ContentScale.Crop
                 )
@@ -167,9 +169,11 @@ fun VideoItem(
 
                     Spacer(modifier = Modifier.height(6.dp))
 
-                    // Upload date
+                    // Upload date and views
                     Text(
-                        text = formatUploadDate(videoMetadata.uploadDate),
+                        text = formatUploadDate(videoMetadata.uploadDate) +
+                                " • " +
+                                videoMetadata.views + " views",
                         style = MaterialTheme.typography.bodyMedium,
                         fontSize = 14.sp,
                         color = MaterialTheme.colorScheme.onSurfaceVariant

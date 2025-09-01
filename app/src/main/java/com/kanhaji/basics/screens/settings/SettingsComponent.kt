@@ -19,6 +19,7 @@ import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.model.screenModelScope
 import cafe.adriel.voyager.navigator.LocalNavigator
@@ -44,6 +45,8 @@ fun SettingsComponent() {
     }
     val listState = rememberLazyListState()
 
+    val context = LocalContext.current
+
     val settingsGroup = listOf(
         Group(
             header = "Themes",
@@ -51,7 +54,7 @@ fun SettingsComponent() {
         ),
         Group(
             header = "App Settings",
-            items = AppSettingsItems.get()
+            items = AppSettingsItems.get(context)
         )
     )
 

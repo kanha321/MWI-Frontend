@@ -44,11 +44,11 @@ private fun isVideoLongerThan3Sec(context: Context, uri: Uri): Boolean {
             MediaMetadataRetriever.METADATA_KEY_DURATION
         )?.toLongOrNull()
 
-        val isValid = durationMs != null && durationMs >= 3_000L
+        val isValid = durationMs != null && durationMs >= 6_000L
         if (!isValid) {
             KToast.show(
                 context,
-                text = "Please select a video longer than 3 seconds.",
+                text = "The video length is too short.",
             )
         }
         isValid

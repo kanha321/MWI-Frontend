@@ -1,15 +1,32 @@
-*.iml
-.gradle
-/local.properties
-/.idea/caches
-/.idea/libraries
-/.idea/modules.xml
-/.idea/workspace.xml
-/.idea/navEditor.xml
-/.idea/assetWizardSettings.xml
-.DS_Store
-/build
-/captures
-.externalNativeBuild
-.cxx
+# Gradle
+.gradle/
+build/
+*/build/
+!gradle/wrapper/gradle-wrapper.jar
+
+# Local configuration
 local.properties
+
+# Android Studio/IntelliJ
+.idea/
+*.iml
+
+# OS files
+.DS_Store
+
+# External native build
+.externalNativeBuild/
+.cxx/
+
+# Captures and generated files
+captures/
+output.json
+
+# Release folder (if you don't want to push release builds)
+app/release/
+
+# Kotlin build cache
+.kotlin/
+
+# Misc
+*.log

@@ -29,7 +29,11 @@ import androidx.compose.ui.unit.dp
 import androidx.media3.exoplayer.ExoPlayer
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
+import com.kanhaji.basics.theme.ThemeManager
+import com.kanhaji.basics.theme.getSystemPrimaryColor
+import com.materialkolor.rememberDynamicColorScheme
 import com.mwi.frontend.util.MwiUtils
+import kotlin.math.max
 
 @Composable
 fun PlayerOverlay(
@@ -42,54 +46,64 @@ fun PlayerOverlay(
     onProgressChange: (Long) -> Unit,
     videoTitle: String,
     modifier: Modifier = Modifier
-) {
-    val navigator = LocalNavigator.currentOrThrow
-    Box(
-        modifier = modifier
-            .fillMaxSize()
-            .background(Color.Black.copy(alpha = 0.5f))
+) {    // Generate a dark scheme from your seed color
+    val darkColorScheme = rememberDynamicColorScheme(
+        seedColor = if (ThemeManager.isDynamicColor) getSystemPrimaryColor() else ThemeManager.customColor.value,
+        isDark = true
+    )
+
+    MaterialTheme(
+        colorScheme = darkColorScheme
     ) {
-        VideoTitle(
-            title = videoTitle,
-            modifier = Modifier
-                .fillMaxWidth()
-                .align(Alignment.TopStart)
-                .padding(top = if (MwiUtils.isLandscape) 0.dp else 12.dp)
-                .padding(start = 12.dp),
-            onBack = { navigator.pop() }
-        )
-
-        PlayPauseButton(
-            isPlaying = isPlaying,
-            onPlayPause = onPlayPause,
-            modifier = Modifier.align(Alignment.Center)
-        )
-
-        Column(
-            modifier = Modifier
-                .align(Alignment.BottomCenter)
-                .fillMaxWidth()
-                .padding(horizontal = 36.dp, vertical = 28.dp)
+        val navigator = LocalNavigator.currentOrThrow
+        Box(
+            modifier = modifier
+                .fillMaxSize()
+                .background(Color.Black.copy(alpha = 0.5f))
         ) {
-            ProgressSlider(
-                currentPosition = currentPosition,
-                totalDuration = totalDuration,
-                isPlaying = isPlaying,
-                onSeekStart = onSeekStart,
-                onSeekEnd = onSeekEnd,
-                onProgressChange = onProgressChange
+            VideoTitle(
+                title = videoTitle,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .align(Alignment.TopStart)
+                    .padding(top = if (MwiUtils.isLandscape) 0.dp else 20.dp)
+                    .padding(start = 12.dp),
+                maxLines = 2,
+                onBack = { navigator.pop() }
             )
-            Spacer(modifier = Modifier.height(8.dp))
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
+
+            PlayPauseButton(
+                isPlaying = isPlaying,
+                onPlayPause = onPlayPause,
+                modifier = Modifier.align(Alignment.Center)
+            )
+
+            Column(
+                modifier = Modifier
+                    .align(Alignment.BottomCenter)
+                    .fillMaxWidth()
+                    .padding(horizontal = 36.dp, vertical = 28.dp)
             ) {
-                TimeDisplay(
+                ProgressSlider(
                     currentPosition = currentPosition,
-                    totalDuration = totalDuration
+                    totalDuration = totalDuration,
+                    isPlaying = isPlaying,
+                    onSeekStart = onSeekStart,
+                    onSeekEnd = onSeekEnd,
+                    onProgressChange = onProgressChange
                 )
-                RotationButton()
+                Spacer(modifier = Modifier.height(8.dp))
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    TimeDisplay(
+                        currentPosition = currentPosition,
+                        totalDuration = totalDuration
+                    )
+                    RotationButton()
+                }
             }
         }
     }
