@@ -82,24 +82,24 @@ fun SplashComponent() {
                 })
             }
 
-            AnimatedVisibility(
-                visible = showText,
-                enter = slideInVertically(
-                    initialOffsetY = { it },
-                    animationSpec = tween(durationMillis = 800)
-                )
-            ) {
-                BasicText(
-                    text = "Mutthi Without Internet 💦💦",
-                    maxLines = 1,
-                    autoSize = TextAutoSize.StepBased(),
-                    style = TextStyle(
-                        color = Color.White,
-                        fontWeight = FontWeight.Bold,
-                    ),
-                    modifier = Modifier.padding(32.dp)
-                )
-            }
+//            AnimatedVisibility(
+//                visible = showText,
+//                enter = slideInVertically(
+//                    initialOffsetY = { it },
+//                    animationSpec = tween(durationMillis = 800)
+//                )
+//            ) {
+//                BasicText(
+//                    text = "Mutthi Without Internet 💦💦",
+//                    maxLines = 1,
+//                    autoSize = TextAutoSize.StepBased(),
+//                    style = TextStyle(
+//                        color = Color.White,
+//                        fontWeight = FontWeight.Bold,
+//                    ),
+//                    modifier = Modifier.padding(32.dp)
+//                )
+//            }
         }
     }
 }

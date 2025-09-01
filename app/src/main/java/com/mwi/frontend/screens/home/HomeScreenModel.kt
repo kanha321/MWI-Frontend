@@ -88,10 +88,12 @@ class HomeScreenModel : ScreenModel {
                     videosTotalPages = response.totalPages
                     videosPage += 1
                 } else {
-                    error = "Failed to load videos: ${result.exceptionOrNull()?.message}"
+                    println("Error fetching videos: ${result.exceptionOrNull()?.message}")
+                    error = "Something went wrong while loading videos."
                 }
             } catch (e: Exception) {
-                error = "Error loading videos: ${e.message}"
+                println("Exception fetching videos: ${e.message}")
+                error = "Something went wrong while loading videos."
             } finally {
                 videosIsLoading = false
             }
