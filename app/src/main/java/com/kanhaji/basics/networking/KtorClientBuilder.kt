@@ -16,7 +16,7 @@ import kotlinx.serialization.json.Json
 import io.ktor.client.plugins.HttpTimeout
 
 fun buildHttpClient(engine: HttpClientEngine): HttpClient {
-    println("KTOR_HTTP_CLIENT_BUILDING") // Add this line
+    println("KTOR_HTTP_CLIENT_BUILDING")
     return HttpClient(engine) {
         install(ContentNegotiation) {
             json(
@@ -28,13 +28,12 @@ fun buildHttpClient(engine: HttpClientEngine): HttpClient {
         }
 
         install(Logging) {
-            println("KTOR_LOGGING_PLUGIN_CONFIGURING")
             logger = object : Logger {
                 override fun log(message: String) {
                     println(message)
                 }
             }
-            level = LogLevel.HEADERS
+            level = LogLevel.BODY
         }
 
         install(HttpTimeout) {
@@ -43,13 +42,12 @@ fun buildHttpClient(engine: HttpClientEngine): HttpClient {
             socketTimeoutMillis = 6000
         }
 
-//        install(defaultrequest) {
-//            header(HttpHeaders.Authorization, Strings.TOKEN)
-//        }
-//
-//        defaultRequest {
+        defaultRequest {
 //            contentType(ContentType.Application.Json)
 //            header(HttpHeaders.ContentType, ContentType.Application.Json)
-//        }
+            // Force no-cache each request
+            header(HttpHeaders.CacheControl, "no-cache")
+            header(HttpHeaders.Pragma, "no-cache")
+        }
     }
 }
