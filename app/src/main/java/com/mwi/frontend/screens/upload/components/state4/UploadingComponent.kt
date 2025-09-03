@@ -56,7 +56,9 @@ fun UploadingComponent(
 
     Column {
         AnimatedVisibility(showUploadVideoComponent && screenModel.dashResult != null) {
-            FinalizeUploadComponent(screenModel, screenModel.dashResult!!)
+            FinalizeUploadComponent(screenModel, screenModel.dashResult!!) {
+                navigator.pop()
+            }
         }
         ConvertingComponent(screenModel)
         AnimatedVisibility(showDoneButton) {
