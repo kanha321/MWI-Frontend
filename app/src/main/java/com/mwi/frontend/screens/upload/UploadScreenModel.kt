@@ -23,6 +23,7 @@ import com.kanhaji.basics.networking.httpClient
 import com.mwi.frontend.entity.CreateVideoForm
 import com.mwi.frontend.entity.DashBuildResult
 import com.mwi.frontend.util.MwiUtils
+import com.mwi.frontend.util.VideoType
 import com.mwi.frontend.util.reduceSpaces
 import io.ktor.client.call.body
 import kotlinx.coroutines.Dispatchers
@@ -327,7 +328,7 @@ class UploadScreenModel(val fileUri: String) : ScreenModel {
     var nsfw by mutableStateOf(true)
 
     fun canContinueToUpload(): Boolean {
-        return title.isNotBlank() && description.isNotBlank() && cachedVideoPath != null && thumbnailUri != null
+        return title.isNotBlank() && cachedVideoPath != null && thumbnailUri != null
     }
 
 
@@ -828,6 +829,7 @@ class UploadScreenModel(val fileUri: String) : ScreenModel {
     suspend fun uploadDashVideo(
         context: Context,
         dashBuildResult: DashBuildResult,
+        videoType: VideoType = VideoType.HEAPS,
         apiBase: String = MwiUtils.BASE_URL,
         batchSize: Int = 5,
         onDone: () -> Unit = {}
@@ -859,7 +861,8 @@ class UploadScreenModel(val fileUri: String) : ScreenModel {
                 nsfw = nsfw,
                 duration = dashBuildResult.durationMs,
                 manifest = dashBuildResult.manifest,
-                thumbnail = dashBuildResult.thumbnail
+                thumbnail = dashBuildResult.thumbnail,
+                videoType = videoType
             )
 
             val segments = dashBuildResult.segments
@@ -886,6 +889,7 @@ class UploadScreenModel(val fileUri: String) : ScreenModel {
                             append("description", form.description)
                             append("nsfw", form.nsfw.toString())
                             append("duration", form.duration.toString())
+                            append("videoType", form.videoType.toString())
 
                             append(
                                 "playlist",
@@ -1016,6 +1020,7 @@ class UploadScreenModel(val fileUri: String) : ScreenModel {
             duration = dashBuildResult.durationMs,
             manifest = dashBuildResult.manifest,
             thumbnail = dashBuildResult.thumbnail,
+            videoType = VideoType.HEAPS
         )
         return "uId: ${createVideoForm.uId}\n" +
                 "title: ${createVideoForm.title}\n" +

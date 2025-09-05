@@ -1,10 +1,12 @@
 package com.mwi.frontend.entity
 
 import androidx.compose.runtime.Immutable
+import androidx.compose.runtime.Stable
 import com.mwi.frontend.util.VideoType
 import kotlinx.serialization.Serializable
 import java.io.File
 
+@Stable
 @Serializable
 data class VideoMetadata(
     val id: Long,
@@ -65,7 +67,7 @@ data class VideoMetadata(
     }
 }
 
-
+@Stable
 @Serializable
 data class PagedResult<T>(
     val items: List<T>,
@@ -83,7 +85,7 @@ data class CreateVideoForm(
     val nsfw: Boolean,
     val manifest: File,
     val thumbnail: File,
-    val videoType: VideoType = VideoType.HEAPS
+    val videoType: VideoType
 )
 
 data class SegmentBatchForm(

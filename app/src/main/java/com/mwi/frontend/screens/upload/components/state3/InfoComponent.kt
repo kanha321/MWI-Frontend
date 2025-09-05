@@ -14,6 +14,7 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.OutlinedTextField
@@ -79,7 +80,7 @@ fun InfoComponent(
                         .focusRequester(titleFocusRequester),
                     singleLine = true,
                     label = { Text("Title") },
-                    placeholder = { Text("Add a short, clear title") },
+                    placeholder = { Text(text = "Add a short, clear title", color = MaterialTheme.colorScheme.primary.copy(0.7f)) },
                     supportingText = { Text("$titleLen/$maxTitleLen") },
                     keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Next),
                     keyboardActions = KeyboardActions(
@@ -94,8 +95,8 @@ fun InfoComponent(
                         .fillMaxWidth()
                         .height(140.dp)
                         .focusRequester(descriptionFocusRequester),
-                    label = { Text("Description") },
-                    placeholder = { Text("Describe what viewers will see") },
+                    label = { Text("Description (Optional)") },
+                    placeholder = { Text(text = "Describe what viewers will see", color = MaterialTheme.colorScheme.primary.copy(0.7f)) },
                     minLines = 4,
                     maxLines = 8,
                     supportingText = { Text("$descLen/$maxDescriptionLen") },
@@ -105,7 +106,7 @@ fun InfoComponent(
                     )
                 )
 
-                Divider()
+                HorizontalDivider()
 
                 Row(
                     modifier = Modifier.fillMaxWidth(),

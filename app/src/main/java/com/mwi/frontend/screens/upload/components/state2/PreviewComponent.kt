@@ -16,7 +16,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CameraAlt
 import androidx.compose.material.icons.filled.CloudUpload
 import androidx.compose.material3.Button
-import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
@@ -76,6 +75,13 @@ fun PreviewComponent(
 
     LaunchedEffect(screenModel) {
         screenModel.setVideoDurationWithFfmpeg()
+    }
+
+    LaunchedEffect(screenModel.cachedVideoPath) {
+        if (screenModel.thumbnailUri == null && screenModel.cachedVideoPath != null) {
+            val thumb = screenModel.extractFrameWithFfmpeg(context, 3000L)
+            screenModel.thumbnailUri = thumb
+        }
     }
 
     // Video Preview Section

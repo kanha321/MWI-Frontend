@@ -13,12 +13,15 @@ import com.mwi.frontend.entity.Update
 import com.mwi.frontend.util.AppSettingsItems.isUpdateAvailable
 import com.mwi.frontend.util.MwiUtils
 import io.ktor.client.call.body
+import io.ktor.client.plugins.timeout
 import io.ktor.client.request.get
 import io.ktor.client.statement.HttpResponse
 import io.ktor.client.statement.bodyAsChannel
 import io.ktor.http.contentLength
 import io.ktor.utils.io.ByteReadChannel
 import io.ktor.utils.io.readAvailable
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import java.io.File
 
 object Updater {
@@ -29,7 +32,7 @@ object Updater {
     var update by mutableStateOf<Update?>(null)
 
     suspend fun checkForUpdates() {
-        val url = "https://kanha321.github.io/pages/mwi/update.json"
+        val url = MwiUtils.BASE_URL + "/api/update/info"
         return try {
             val response = httpClient.get(url)
             val update = response.body<Update>()
@@ -43,19 +46,28 @@ object Updater {
         }
     }
 
-    suspend fun startDownload(context: Context) {
+    suspend fun startDownload(
+        context: Context,
+        onDownloadComplete: (File) -> Unit
+    ) = withContext(Dispatchers.IO) {
         if (update == null) {
             println("No update data available.")
-            return
+            return@withContext
         }
 
         isDownloading = true
+        downloadProgress = 0f
 
-        val downloadUrl = update!!.downloadUrl
+        val downloadUrl = MwiUtils.BASE_URL + update!!.downloadUrl
 
         try {
-            // Make request
-            val response: HttpResponse = httpClient.get(downloadUrl)
+            val response: HttpResponse = httpClient.get(downloadUrl) {
+                timeout {
+                    requestTimeoutMillis = 600_000 // 10 min
+                    connectTimeoutMillis = 30_000  // 30 sec
+                    socketTimeoutMillis = 600_000  // 10 min
+                }
+            }
 
             val contentLength = response.contentLength() ?: -1L
             val fileName = downloadUrl.substringAfterLast("/")
@@ -73,35 +85,31 @@ object Updater {
 
                     bytesRead += read
                     if (contentLength > 0) {
-                        downloadProgress = bytesRead.toFloat() / contentLength.toFloat()
-                        println("Download progress: ${"%.2f".format(downloadProgress * 100)}%")
+                        val progress = bytesRead.toFloat() / contentLength.toFloat()
+                        withContext(Dispatchers.Main) {
+                            downloadProgress = progress
+                        }
                     }
                 }
             }
 
-            println("Download complete: ${outputFile.absolutePath}")
-            isDownloading = false
-            downloadProgress = 1f
-
-            // ✅ Launch package installer
-            val apkUri: Uri = FileProvider.getUriForFile(
-                context,
-                "${context.packageName}.provider", // must match the provider authority in manifest
-                outputFile
-            )
-
-            val intent = Intent(Intent.ACTION_VIEW).apply {
-                setDataAndType(apkUri, "application/vnd.android.package-archive")
-                addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-                addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            withContext(Dispatchers.Main) {
+                downloadProgress = 1f
+                isDownloading = false
             }
 
-            context.startActivity(intent)
+            println("✅ Download complete: ${outputFile.absolutePath}")
+            withContext(Dispatchers.Main) {
+                onDownloadComplete(outputFile)
+            }
 
         } catch (e: Exception) {
             e.printStackTrace()
-            downloadProgress = 0f
-            isDownloading = false
+            withContext(Dispatchers.Main) {
+                downloadProgress = 0f
+                isDownloading = false
+            }
         }
     }
+
 }
