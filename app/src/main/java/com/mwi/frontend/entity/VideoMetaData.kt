@@ -85,7 +85,7 @@ data class CreateVideoForm(
     val nsfw: Boolean,
     val manifest: File,
     val thumbnail: File,
-    val videoType: VideoType = VideoType.HEAPS
+    val videoType: VideoType
 )
 
 data class SegmentBatchForm(

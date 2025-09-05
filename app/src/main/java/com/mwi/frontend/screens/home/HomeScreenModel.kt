@@ -42,7 +42,7 @@ class HomeScreenModel : ScreenModel {
         private set
     var error by mutableStateOf<String?>(null)
 
-    val defaultPageSize = 4
+    val defaultPageSize = 10
 
     // ---- API Call ----
     suspend fun getAllVideos(
